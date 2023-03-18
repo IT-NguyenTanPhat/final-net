@@ -1,0 +1,82 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = "_Auth";
+    ViewData["Title"] = "Đăng nhập";
+}
+
+<div class="back-to-home rounded d-none d-sm-block">
+    <a href="/" class="btn btn-icon btn-soft-primary"><i data-feather="home" class="icons"></i></a>
+</div>
+
+<!-- Hero Start -->
+<section class="bg-home d-flex align-items-center">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-7 col-md-6">
+                <div class="me-lg-5">
+                    <img src="~/images/login.svg" class="img-fluid d-block mx-auto" alt="">
+                </div>
+            </div>
+            <div class="col-lg-5 col-md-6">
+                <div class="card login-page bg-white shadow rounded border-0">
+                    <div class="card-body">
+                        <h4 class="card-title text-center">Đăng nhập</h4>
+                        <form class="login-form mt-4" method="post">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="mb-3">
+                                        <label class="form-label">Email <span class="text-danger">*</span></label>
+                                        <div class="form-icon position-relative">
+                                            <i data-feather="user" class="fea icon-sm icons"></i>
+                                            <input type="email" class="form-control ps-5" placeholder="Nhập email" name="email" required="">
+                                        </div>
+                                    </div>
+                                </div><!--end col-->
+
+                                <div class="col-lg-12">
+                                    <div class="mb-3">
+                                        <label class="form-label">Mật khẩu <span class="text-danger">*</span></label>
+                                        <div class="form-icon position-relative">
+                                            <i data-feather="key" class="fea icon-sm icons"></i>
+                                            <input type="password" name="pwd" class="form-control ps-5" placeholder="Nhập mật khẩu" required="">
+                                        </div>
+                                    </div>
+                                </div><!--end col-->
+
+                                <div class="col-lg-12 mb-0">
+                                    <div class="d-grid">
+                                        <button class="btn btn-primary">Đăng nhập</button>
+                                    </div>
+                                </div><!--end col-->
+
+                                <div class="col-lg-12 mt-4 text-center">
+                                    <h6>Hoặc đăng nhập với</h6>
+                                    <div class="row">
+                                        <div class="col-6 mt-3">
+                                            <div class="d-grid">
+                                                <a href="javascript:void(0)" class="btn btn-light"><i class="mdi mdi-facebook text-primary"></i> Facebook</a>
+                                            </div>
+                                        </div><!--end col-->
+
+                                        <div class="col-6 mt-3">
+                                            <div class="d-grid">
+                                                <a href="javascript:void(0)" class="btn btn-light"><i class="mdi mdi-google text-danger"></i> Google</a>
+                                            </div>
+                                        </div><!--end col-->
+                                    </div>
+                                </div><!--end col-->
+
+                                <div class="col-12 text-center">
+                                    <p class="mb-0 mt-3"><small class="text-dark me-2">Bạn chưa có tài khoản ?</small> <a href="/auth/register" class="text-dark fw-bold">Đăng ký</a></p>
+                                </div><!--end col-->
+                            </div><!--end row-->
+                        </form>
+                    </div>
+                </div><!---->
+            </div> <!--end col-->
+        </div><!--end row-->
+    </div> <!--end container-->
+</section><!--end section-->
+<!-- Hero End -->

@@ -10,7 +10,7 @@
     <!-- Bootstrap -->
     <link href="~/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <!-- Icons -->
-    <link href="~/css/materialdesignicons.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.jsdelivr.net/npm/&#64;mdi/font@7.1.96/css/materialdesignicons.min.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="~/../../../unicons.iconscout.com/release/v3.0.6/css/line.css">
     <!-- Slider -->
     <link rel="stylesheet" href="~/css/tiny-slider.css" />
@@ -39,7 +39,7 @@
                 <h3 class="mt-2">Timviecit</h3>
             </a>
             <div class="buy-button">
-                <a href="#" class="btn btn-primary">Đăng nhập</a>
+                <a href="/auth/login" class="btn btn-primary">Đăng nhập</a>
             </div><!--end login button-->
             <!-- End Logo container-->
             <div class="menu-extras">
@@ -55,16 +55,16 @@
                     <!-- End mobile menu toggle-->
                 </div>
             </div>
-
-            <div id="navigation">
+             
+            <div id="navigation"> 
                 <!-- Navigation Menu-->
                 <ul class="navigation-menu">
                     <li><a href="/" class="sub-menu-item">Trang chủ</a></li>
-                    <li><a href="/" class="sub-menu-item">Việc làm</a></li>
-                    <li><a href="/" class="sub-menu-item">Đăng tuyển</a></li>
+                    <li><a href="/jobs" class="sub-menu-item">Việc làm</a></li>
+                    <li><a href="#" class="sub-menu-item">Đăng tuyển</a></li>
                 </ul><!--end navigation menu-->
                 <div class="buy-menu-btn d-none">
-                    <a href="#" class="btn btn-primary">Đăng nhập</a>
+                    <a href="/auth/login" class="btn btn-primary">Đăng nhập</a>
                 </div><!--end login button-->
             </div><!--end navigation-->
         </div><!--end container-->
@@ -76,11 +76,11 @@
     <footer class="footer bg-light">
         <div class="container">
             <div class="row">
-                <div class="col-lg-4 col-12 mb-0 mb-md-4 pb-0 pb-md-2">
-                    <a href="~/#" class="logo-footer">
+                <div class="col-lg-5 col-12 mb-0 mb-md-4 pb-0 pb-md-2">
+                    <a href="#" class="logo-footer">
                         <h3>Timviecit</h3>
                     </a>
-                    <p class="mt-4 text-muted">Start working with Landrick that can provide everything you need to generate awareness, drive traffic, connect.</p>
+                    <p class="mt-4 text-muted">Hàng ngàn công việc hấp dẫn đang chờ đợi bạn!</p>
                     <ul class="list-unstyled social-icon social mb-0 mt-4">
                         <li class="list-inline-item"><a href="~/javascript:void(0)" class="rounded"><i data-feather="facebook" class="fea icon-sm fea-social"></i></a></li>
                         <li class="list-inline-item"><a href="~/javascript:void(0)" class="rounded"><i data-feather="instagram" class="fea icon-sm fea-social"></i></a></li>
@@ -89,45 +89,31 @@
                     </ul><!--end icon-->
                 </div><!--end col-->
 
-                <div class="col-lg-2 col-md-4 col-12 mt-4 mt-sm-0 pt-2 pt-sm-0">
-                    <h5 class="text-dark footer-head">Company</h5>
+                <div class="col-lg-3 col-md-4 col-12 mt-4 mt-sm-0 pt-2 pt-sm-0">
+                    <h5 class="text-dark footer-head">Việc Làm</h5>
                     <ul class="list-unstyled footer-list mt-4">
-                        <li><a href="~/page-aboutus.html" class="text-muted"><i class="uil uil-angle-right-b me-1"></i> About us</a></li>
-                        <li><a href="~/page-services.html" class="text-muted"><i class="uil uil-angle-right-b me-1"></i> Services</a></li>
-                        <li><a href="~/page-team.html" class="text-muted"><i class="uil uil-angle-right-b me-1"></i> Team</a></li>
-                        <li><a href="~/page-pricing.html" class="text-muted"><i class="uil uil-angle-right-b me-1"></i> Pricing</a></li>
-                        <li><a href="~/portfolio-modern-three.html" class="text-muted"><i class="uil uil-angle-right-b me-1"></i> Project</a></li>
+                        <li><a href="~/page-aboutus.html" class="text-muted"><i class="uil uil-angle-right-b me-1"></i> Tìm việc</a></li>
+                        <li><a href="~/portfolio-modern-three.html" class="text-muted"><i class="uil uil-angle-right-b me-1"></i> Đăng tuyển</a></li>
                     </ul>
                 </div><!--end col-->
 
-                <div class="col-lg-3 col-md-4 col-12 mt-4 mt-sm-0 pt-2 pt-sm-0">
-                    <h5 class="text-dark footer-head">Usefull Links</h5>
-                    <ul class="list-unstyled footer-list mt-4">
-                        <li><a href="~/page-terms.html" class="text-muted"><i class="uil uil-angle-right-b me-1"></i> Terms of Services</a></li>
-                        <li><a href="~/page-privacy.html" class="text-muted"><i class="uil uil-angle-right-b me-1"></i> Privacy Policy</a></li>
-                        <li><a href="~/documentation.html" class="text-muted"><i class="uil uil-angle-right-b me-1"></i> Documentation</a></li>
-                        <li><a href="~/changelog.html" class="text-muted"><i class="uil uil-angle-right-b me-1"></i> Changelog</a></li>
-                        <li><a href="~/components.html" class="text-muted"><i class="uil uil-angle-right-b me-1"></i> Components</a></li>
-                    </ul>
-                </div><!--end col-->
-
-                <div class="col-lg-3 col-md-4 col-12 mt-4 mt-sm-0 pt-2 pt-sm-0">
-                    <h5 class="text-dark footer-head">Newsletter</h5>
-                    <p class="mt-4 text-muted">Sign up and receive the latest tips via email.</p>
+                <div class="col-lg-4 col-md-4 col-12 mt-4 mt-sm-0 pt-2 pt-sm-0">
+                    <h5 class="text-dark footer-head">Nhận tin tuyển dụng</h5>
+                    <p class="mt-4 text-muted">Đăng ký và nhận thông tin tuyển dụng sớm nhất từ chúng tôi.</p>
                     <form>
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="foot-subscribe foot-white mb-3">
-                                    <label class="text-muted form-label">Write your email <span class="text-danger">*</span></label>
+                                    <label class="text-muted form-label">Điền email của bạn<span class="text-danger">*</span></label>
                                     <div class="form-icon position-relative">
                                         <i data-feather="mail" class="fea icon-sm icons"></i>
-                                        <input type="email" name="email" id="emailsubscribe" class="form-control bg-light border ps-5 rounded" placeholder="Your email : " required>
+                                        <input type="email" name="email" id="emailsubscribe" class="form-control bg-light border ps-5 rounded" placeholder="Email : " required>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-lg-12">
                                 <div class="d-grid">
-                                    <input type="submit" id="submitsubscribe" name="send" class="btn btn-primary" value="Subscribe">
+                                    <input type="submit" id="submitsubscribe" name="send" class="btn btn-primary" value="Đăng ký">
                                 </div>
                             </div>
                         </div>
