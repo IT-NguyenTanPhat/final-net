@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
+using Microsoft.EntityFrameworkCore;
 using timviec.Models;
 
 namespace timviec.Controllers
@@ -8,6 +8,12 @@ namespace timviec.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly AppDbContext _db;
+
+        public class Database {
+            public IEnumerable<Category> categories { get; set; }
+            public IEnumerable<Job> jobs { get; set; }
+            public IEnumerable<Company> companies { get; set; }
+        }
 
         public HomeController(ILogger<HomeController> logger, AppDbContext db)
         {
@@ -18,33 +24,85 @@ namespace timviec.Controllers
         [Route("")]
         public IActionResult Index()
         {
-            IEnumerable<Category> obj = _db.categories;
-            return View(obj);
+            IEnumerable<Category> categories = _db.categories.Include(c => c.Jobs);
+            IEnumerable<Job> jobs = _db.jobs.Include(c => c.Company);
+            IEnumerable<Company> companies = _db.companies;
+
+            Database model = new Database()
+            {
+                categories = categories,
+                jobs = jobs,
+                companies = companies,
+            };
+            return View(model);
         }
 
-        [Route("/jobs")]
-        public IActionResult Jobs()
+        [HttpGet("/{id?}")]
+        public IActionResult Profile(string? id)
         {
-            IEnumerable<Category> obj = _db.categories;
-            return View(obj);
+            if (_db.users.Find(id) != null)
+            {
+                return RedirectToAction("Profile", "User", new { id });
+
+            }
+            if (_db.companies.Find(id) != null)
+            {
+                return RedirectToAction("Profile", "Company", new { id });
+
+            }
+            return View("Error");
         }
 
-        [Route("/jobs/{id?}")]
-        public IActionResult JobDetail()
+        [HttpGet("/find-account")]
+        public IActionResult FindAccount()
         {
-            return View();
+            if (Request.Query.TryGetValue("email", out var value))
+            {
+                var email = value.ToString();
+                var user = _db.users
+                    .Where(u => u.Email == email)
+                    .Select(u => new { u.Id, u.Name, u.Avatar, u.Email })
+                    .SingleOrDefault();
+                if (user != null)
+                {
+                    return Json(user);
+                }
+
+                var company = _db.companies
+                    .Where(u => u.Email == email)
+                    .Select(u => new { u.Id, u.Name, u.Avatar, u.Email })
+                    .SingleOrDefault();
+                if (company != null)
+                {
+                    return Json(company);
+                }
+            }
+            return BadRequest();
         }
 
-        [Route("/jobs/{id?}/apply")]
-        public IActionResult ApplyForm()
+        [HttpGet("/get-locations")]
+        public IActionResult GetLocations()
         {
-            return View();
+            var locations = _db.companies
+                .Select(u => new { u.Locaiton });
+            if (locations != null)
+            {
+                return Json(locations);
+            }
+            return BadRequest();
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        [HttpGet("/admin")]
+        public IActionResult Admin()
+        {
+            return RedirectToAction("Dashboard", "Category");
+        }
+
+        [Route("{*url}")]
         public IActionResult Error()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            ViewData["message"] = "404 Not Found";
+            return View();
         }
     }
 }

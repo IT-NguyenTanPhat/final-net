@@ -1,0 +1,124 @@
+﻿@model IEnumerable<Category>
+@{
+    var name = ViewData["CompanyName"];
+    var id = ViewData["CompanyId"];
+    ViewData["title"] = "Đăng tin tuyển dụng";
+}
+
+@if (TempData["error"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show w-25 position-absolute" role="alert" style="top:15px;right:15px;z-index:1000;">
+        @TempData["error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"> </button>
+    </div>
+}
+
+<!-- Hero Start -->
+<section class="bg-half bg-light d-table w-100">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-12 text-center">
+                <div class="page-next-level">
+                    <h4 class="title"> Đăng Tin Tuyền Dụng </h4>
+                    <div class="page-next">
+                        <nav aria-label="breadcrumb" class="d-inline-block">
+                            <ul class="breadcrumb bg-white rounded shadow mb-0">
+                                <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+                                <li class="breadcrumb-item"><a href="/companies/@id">@name</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Đăng tin tuyển dụng</li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>  <!--end col-->
+        </div><!--end row-->
+    </div> <!--end container-->
+</section><!--end section-->
+<!-- Hero End -->
+<!-- Shape Start -->
+<div class="position-relative">
+    <div class="shape overflow-hidden text-white">
+        <svg viewBox="0 0 2880 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0 48H1437.5H2880V0H2160C1442.5 52 720 0 720 0H0V48Z" fill="currentColor"></path>
+        </svg>
+    </div>
+</div>
+<!--Shape End-->
+<!-- Job apply form Start -->
+<section class="section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10 col-md-7">
+                <div class="card custom-form border-0">
+                    <div class="card-body">
+                        <form class="rounded shadow p-4" method="post">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Tên :<span class="text-danger">*</span></label>
+                                        <div class="form-icon position-relative">
+                                            <i data-feather="user" class="fea icon-sm icons"></i>
+                                            <input name="name" required id="name" type="text" class="form-control ps-5" placeholder="Tên :">
+                                        </div>
+                                    </div>
+                                </div><!--end col-->
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Kinh nghiệm :</label>
+                                        <div class="form-icon position-relative">
+                                            <i data-feather="briefcase" class="fea icon-sm icons"></i>
+                                            <input name="experience" id="email" type="number" min="0" class="form-control ps-5" placeholder="Số năm kinh nghiệm :">
+                                        </div>
+                                    </div>
+                                </div><!--end col-->
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Lương :</label>
+                                        <div class="form-icon position-relative">
+                                            <i data-feather="dollar-sign" class="fea icon-sm icons"></i>
+                                            <input name="salary" id="number" type="number" min="0" class="form-control ps-5" placeholder="Lương :">
+                                        </div>
+                                    </div>
+                                </div><!--end col-->
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Hình thức :<span class="text-danger">*</span></label>
+                                        <select class="form-control custom-select" required name="category" id="Sortbylist-Shop">
+                                            @foreach (var obj in Model)
+                                            {
+                                                <option value="@obj.Id">@obj.Name</option>
+                                            }
+                                            
+                                        </select>
+                                    </div>
+                                </div><!--end col-->
+                                <div class="col-md-12">
+                                    <div class="mb-3">
+                                        <label class="form-label">Mô tả :<span class="text-danger">*</span></label>
+                                        <div class="form-icon position-relative">
+                                            <i data-feather="message-circle" class="fea icon-sm icons"></i>
+                                            <textarea name="description" required id="editor"></textarea>
+                                        </div>
+                                    </div>
+                                </div><!--end col-->
+                            </div><!--end row-->
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <input type="submit" class="submitBnt btn btn-primary" value="Đăng ngay">
+                                </div><!--end col-->
+                            </div><!--end row-->
+                        </form><!--end form-->
+                    </div>
+                </div><!--end custom-form-->
+            </div>
+        </div>
+    </div><!--end container-->
+</section><!--end section-->
+<!-- Job apply form End -->
+
+<script>
+    var editor = new FroalaEditor('#editor', {
+        placeholderText: "Miêu tả công việc...",
+        height: 150,
+    });
+</script>

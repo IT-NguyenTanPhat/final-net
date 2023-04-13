@@ -1,16 +1,24 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System.ComponentModel.DataAnnotations;
 
 namespace timviec.Models
 {
     public class Company
     {
         [Key]
-        public int Id { get; set; }
+        public string? Id { get; set; }
         [Required]
         public string Name { get; set; }
         [Required]
-        public string Slug { get; set; }
-        public virtual Job Jobs { get; set; }
+        public string Email { get; set; }
+        [Required]
+        public string Password { get; set; }
+        public string? Locaiton { get; set; }    
+        public string? Phone { get; set; }
+        public string Avatar { get; set; } = "/uploads/user.png";
+        public string? Website { get; set; }
+        public string? Description { get; set; }
+        public virtual ICollection<Job>? Jobs { get; set; }
 
     }
 }

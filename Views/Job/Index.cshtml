@@ -1,0 +1,144 @@
+﻿@using static timviec.Controllers.HomeController;
+@model Database
+@{
+    ViewData["Title"] = "Việc làm";
+}
+
+<!-- Job List Start -->
+<section class="section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 col-md-6 col-12">
+                <div class="sidebar sticky-bar p-4 rounded shadow">
+                    <!-- SEARCH -->
+                    <form role="search" method="get">
+                    <div class="widget">
+                        <div class="input-group mb-3 border rounded">
+                            <input type="text" id="s" name="s" class="form-control border-0" placeholder="Nhập từ khóa...">
+                        </div>
+
+                    </div>
+                    <!-- SEARCH -->
+                    <!-- Categories -->
+                    <div class="widget mb-4 pb-4 border-bottom">
+                        <h5 class="widget-title">Danh mục</h5>
+                        <div class="mt-4 mb-0">
+                            <select name="c" class="form-select form-control" aria-label="Default select example">
+                                <option selected="" value="all">Tất cả</option>
+                                    @foreach (var obj in Model.categories)
+                                    {
+                                        <option value="@obj.Id">@obj.Name</option>
+                                    }
+                            </select>
+                        </div>
+                    </div>
+                    <!-- Categories -->
+                    <!-- Posted -->
+                    <div class="widget mb-4 pb-4 border-bottom">
+                        <h5 class="widget-title">Ngày đăng</h5>
+                        <div class="mt-4">
+                            <div class="form-check mb-0">
+                                <input class="form-check-input" checked="" type="radio" name="postedAt" value="today" id="lasthour">
+                                <label class="form-check-label" for="lasthour">Hôm nay</label>
+                            </div>
+
+                            <div class="form-check mb-0">
+                                <input class="form-check-input" checked="" type="radio" name="postedAt" value="yesterday" id="oneday">
+                                <label class="form-check-label" for="oneday">Hôm qua</label>
+                            </div>
+
+                            <div class="form-check mb-0">
+                                <input class="form-check-input" checked="" type="radio" name="postedAt" value="lastweek" id="sevenday">
+                                <label class="form-check-label" for="sevenday">Tuần trước</label>
+                            </div>
+
+                            <div class="form-check mb-0">
+                                <input class="form-check-input" checked="" type="radio" name="postedAt" value="lastmonth" id="onemonth">
+                                <label class="form-check-label" for="onemonth">Tháng trước</label>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Lọc</button>
+                    <!-- Posted -->
+                    </form>
+                </div>
+            </div><!--end col-->
+
+            <div class="col-lg-8 col-md-6 col-12 mt-4 mt-sm-0 pt-2 pt-sm-0">
+                <div class="row">
+                    @foreach (var obj in Model.jobs)
+                    {
+                        <div class="col-lg-6 col-12 mb-4 pb-2">
+                            <div class="card job-box rounded shadow border-0 overflow-hidden">
+                                <div class="border-bottom">
+                                    <div class="position-relative">
+                                        <img src="images/job/full.jpg" class="img-fluid" alt="">
+                                        <div class="job-overlay bg-white"></div>
+                                    </div>
+                                    <div class="mb-0 position">
+                                        <a href="/jobs/@obj.Id" class="text-dark h5">@obj.Name</a>
+                                    </div>
+                                    <ul class="list-unstyled head mb-0">
+                                        <li class="badge bg-success rounded-pill">@obj.Category?.Name</li>
+                                    </ul>
+                                </div>
+
+                                <div class="card-body content position-relative">
+                                    <div class="firm-logo rounded-circle shadow bg-light text-center">
+                                        <img src="@obj.Company?.Avatar" class="avatar avatar-md-sm" alt="">
+                                    </div>
+                                    <div class="company-detail text-center mt-3">
+                                        <h5 class="mb-0"><a href="/companies/@obj.Company?.Id" class="text-dark company-name">@obj.Company?.Name</a></h5>
+                                        <p class="text-muted"><a href="#" class="text-muted"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-map-pin fea icon-sm"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                            @obj.Company?.Locaiton</a></p>
+                                    </div>
+                                    <ul class="job-facts list-unstyled">
+                                        @if (obj.Experience == null) {  
+                                            <li class="list-inline-item text-muted"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check fea icon-sm text-success me-1"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                                Không yêu cầu kinh nghiệm</li>
+                                        } else
+                                        {
+                                            <li class="list-inline-item text-muted"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check fea icon-sm text-success me-1"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                                @obj.Experience năm kinh nghiệm</li>
+                                        }
+                                        @if (obj.Salary == null) {
+                                            <li class="list-inline-item text-muted"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check fea icon-sm text-success me-1"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                                Lương: Thương lượng</li>
+                                        } else
+                                        {
+                                            <li class="list-inline-item text-muted">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check fea icon-sm text-success me-1"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                                Lương: @obj.Salary VNĐ
+                                            </li>
+                                        }
+                                        <li class="list-inline-item text-muted"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check fea icon-sm text-success me-1"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                            Đăng ngày: @obj.PostedAt.ToString("dd-MM-yyyy")
+                                        </li>
+                                    </ul>
+                                    <div class="d-grid">
+                                        <a href="/jobs/@obj.Id" class="btn btn-outline-primary">Ứng tuyển ngay</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!--end col-->
+                    }
+                </div><!--end row-->
+
+                <div class="row">
+                    <!-- PAGINATION START -->
+                    <div class="col-12">
+                        <ul class="pagination justify-content-center mb-0">
+                            <li class="page-item"><a class="page-link" href="javascript:void(0)" aria-label="Previous">Trước</a></li>
+                            <li class="page-item active"><a class="page-link" href="javascript:void(0)">1</a></li>
+                            <li class="page-item"><a class="page-link" href="javascript:void(0)">2</a></li>
+                            <li class="page-item"><a class="page-link" href="javascript:void(0)">3</a></li>
+                            <li class="page-item"><a class="page-link" href="javascript:void(0)" aria-label="Next">Sau</a></li>
+                        </ul>
+                    </div><!--end col-->
+                    <!-- PAGINATION END -->
+                </div><!--end row-->
+            </div><!--end col-->
+        </div><!--end row-->
+    </div><!--end container-->
+</section><!--end section-->
+<!-- Job List End -->

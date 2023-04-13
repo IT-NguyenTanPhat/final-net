@@ -1,0 +1,95 @@
+﻿@model IEnumerable<Category>
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = "_Admin";
+    ViewData["Title"] = "Danh mục";
+}
+
+@if (TempData["success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show w-25 position-absolute" role="alert" style="top:15px;right:15px;z-index:10000;">
+        @TempData["success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"> </button>
+    </div>
+}
+
+@if (TempData["error"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show w-25 position-absolute" role="alert" style="top:15px;right:15px;z-index:10000;">
+        @TempData["error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"> </button>
+    </div>
+}
+
+<section class='p-4 shadow rounded'>
+    <a href="#" class="btn btn-success mb-3" data-mdb-toggle="modal" data-mdb-target="#exampleModal">Thêm danh mục</a>
+    <table id='table_id' class='display'>
+        <thead>
+            <tr>
+                <th>Tên</th>
+                <th>Thao tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var obj in Model)
+            {
+                <tr>
+                    <td>@obj.Name</td>
+                    <td>
+                        <a href="/admin/categories/@obj.Id" class="text-warning me-2"><i class="fa-solid fa-pen-to-square"></i></a>
+                        <a href="#" class="text-danger"
+                        onclick="$('#delete-form').attr('action', '/admin/categories/@obj.Id/delete')"
+                        data-mdb-toggle="modal" data-mdb-target="#comfirmModal"><i class="fa-solid fa-trash"></i></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</section>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Thêm danh mục</h5>
+        <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form method="post" action="/admin/categories/create">
+        <div class="modal-body">
+            <div class="form-outline mb-4">
+               <input type="text" name="name" id="form1Example1" class="form-control" />
+               <label class="form-label" for="form1Example1">Tên</label>
+            </div>
+        </div>
+        <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Đóng</button>
+        <button type="submit" class="btn btn-primary">Thêm</button>
+        </div>
+      </form>
+      </div>
+  </div>
+</div>
+
+<div class="modal fade" id="comfirmModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Xóa danh mục?</h5>
+        <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form method="post" id="delete-form">
+        <div class="modal-body">
+            <p>Bạn có chắc muốn xóa danh mục này?</p>
+        </div>
+        <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Đóng</button>
+        <button type="submit" class="btn btn-danger">Xóa</button>
+        </div>
+      </form>
+      </div>
+  </div>
+</div>
+

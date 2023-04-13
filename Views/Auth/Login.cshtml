@@ -6,6 +6,22 @@
     ViewData["Title"] = "Đăng nhập";
 }
 
+@if (TempData["success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show w-25 position-absolute" role="alert" style="top:15px;right:15px;z-index:1000;">
+    @TempData["success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"> </button>
+    </div>
+}
+
+@if (TempData["error"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show w-25 position-absolute" role="alert" style="top:15px;right:15px;z-index:1000;">
+    @TempData["error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"> </button>
+    </div>
+}
+
 <div class="back-to-home rounded d-none d-sm-block">
     <a href="/" class="btn btn-icon btn-soft-primary"><i data-feather="home" class="icons"></i></a>
 </div>
@@ -40,7 +56,7 @@
                                         <label class="form-label">Mật khẩu <span class="text-danger">*</span></label>
                                         <div class="form-icon position-relative">
                                             <i data-feather="key" class="fea icon-sm icons"></i>
-                                            <input type="password" name="pwd" class="form-control ps-5" placeholder="Nhập mật khẩu" required="">
+                                            <input type="password" name="password" class="form-control ps-5" placeholder="Nhập mật khẩu" required="">
                                         </div>
                                     </div>
                                 </div><!--end col-->

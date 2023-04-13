@@ -1,0 +1,33 @@
+﻿@model Category
+@{
+    Layout = "_Admin";
+    ViewData["title"] = Model.Name;
+}
+
+@if (TempData["success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show w-25 position-absolute" role="alert" style="top:15px;right:15px;z-index:10000;">
+        @TempData["success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"> </button>
+    </div>
+}
+
+@if (TempData["error"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show w-25 position-absolute" role="alert" style="top:15px;right:15px;z-index:10000;">
+        @TempData["error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"> </button>
+    </div>
+}
+
+<section class='p-4 shadow rounded'>
+    <h2 class="mb-4">Cập nhật danh mục</h2>
+    <form method="post">
+        <div class="form-outline mb-4">
+            <input type="text" name="name" id="form1Example1" class="form-control" value="@Model.Name" />
+            <label class="form-label" for="form1Example1">Tên</label>
+        </div>
+        <a href="/admin/categories" class="btn btn-secondary me-2">Trở lại</a>
+        <button type="submit" class="btn btn-primary">Cập nhật</button>
+    </form>
+</section>

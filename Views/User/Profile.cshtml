@@ -1,11 +1,27 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model User
 @{
+    ViewData["title"] = Model.Name;
+    var isOwn = ViewBag.isOwn == true ? true : false;
+}
+
+@if (TempData["success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show w-25 position-absolute" role="alert" style="top:15px;right:15px;z-index:1000;">
+        @TempData["success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"> </button>
+    </div>
+}
+
+@if (TempData["error"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show w-25 position-absolute" role="alert" style="top:15px;right:15px;z-index:1000;">
+        @TempData["error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"> </button>
+    </div>
 }
 
 <!-- Hero Start -->
-<section class="bg-half-260 d-table w-100" style="background: url('images/job/candidate.jpg');">
+<section class="bg-half-260 d-table w-100" style="background: url('/images/job/company.jpg');">
     <div class="bg-overlay"></div>
 </section><!--end section-->
 <!-- Hero End -->
@@ -16,21 +32,18 @@
             <div class="col-lg-4 col-md-5 col-12">
                 <div class="card job-profile shadow border-0">
                     <div class="text-center py-5 border-bottom rounded-top">
-                        <img src="images/client/01.jpg" class="avatar avatar-medium mx-auto rounded-circle shadow d-block" alt="">
-                        <h5 class="mt-3 mb-0">Thomas Brewer</h5>
-                        <p class="text-muted mb-0">Senior Web Developer</p>
+                        <img src="@Model.Avatar" class="avatar avatar-medium mx-auto rounded-circle shadow d-block" alt="">
+                        <h5 class="mt-3 mb-0">@Model.Name</h5>
+                        <p class="text-muted mb-0">@Model.Title</p>
                     </div>
                     <div class="card-body">
-                        <h5 class="card-title">Personal Details :</h5>
+                        <h5 class="card-title">Thông tin cá nhân :</h5>
 
                         <ul class="list-unstyled">
-                            <li class="h6"><i data-feather="mail" class="fea icon-sm text-warning me-3"></i><span class="text-muted">Email :</span> thomas@mail.com</li>
-                            <li class="h6"><i data-feather="gift" class="fea icon-sm text-warning me-3"></i><span class="text-muted">D.O.B. :</span> 31st Dec, 1996</li>
-                            <li class="h6"><i data-feather="home" class="fea icon-sm text-warning me-3"></i><span class="text-muted">Address :</span> 15 Razy street</li>
-                            <li class="h6"><i data-feather="map-pin" class="fea icon-sm text-warning me-3"></i><span class="text-muted">City :</span> London</li>
-                            <li class="h6"><i data-feather="globe" class="fea icon-sm text-warning me-3"></i><span class="text-muted">Country :</span> UK</li>
-                            <li class="h6"><i data-feather="server" class="fea icon-sm text-warning me-3"></i><span class="text-muted">Postal Code :</span> 521452</li>
-                            <li class="h6"><i data-feather="phone" class="fea icon-sm text-warning me-3"></i><span class="text-muted">Mobile :</span> (+125) 1542-8452</li>
+                            <li class="h6"><i data-feather="mail" class="fea icon-sm text-warning me-3"></i><span class="text-muted">Email :</span> @Model.Email</li>
+                            <li class="h6"><i data-feather="gift" class="fea icon-sm text-warning me-3"></i><span class="text-muted">Ngày sinh :</span> @Model.Birthday?.ToString("dd-MM-yyyy")</li>
+                            <li class="h6"><i data-feather="home" class="fea icon-sm text-warning me-3"></i><span class="text-muted">Địa chỉ :</span> @Model.Location</li>
+                            <li class="h6"><i data-feather="phone" class="fea icon-sm text-warning me-3"></i><span class="text-muted">Số điện thoại :</span> @Model.Phone</li>
 
                             <li>
                                 <ul class="list-unstyled social-icon mb-0 mt-4">
@@ -45,7 +58,7 @@
                             </li>
                         </ul>
                         <div class="d-grid">
-                            <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#Contactme" class="btn btn-primary"><i class="uil uil-envelope align-middle"></i> Contact Me</a>
+                            <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#Contactme" class="btn btn-primary"><i class="uil uil-envelope align-middle"></i> Chỉnh sửa</a>
                         </div>
                     </div>
                 </div>
@@ -53,9 +66,8 @@
 
             <div class="col-lg-8 col-md-7 col-12 mt-4 mt-sm-0 pt-2 pt-sm-0">
                 <div class="ms-lg-4">
-                    <h4>About us :</h4>
-                    <p class="text-muted">Obviously I'M Web Developer. Web Developer with over 3 years of experience. Experienced with all stages of the development cycle for dynamic web projects. The as opposed to using 'Content here, content here', making it look like readable English.</p>
-                    <p class="text-muted mb-0">Data Structures and Algorithms are the heart of programming. Initially most of the developers do not realize its importance but when you will start your career in software development, you will find your code is either taking too much time or taking too much space.</p>
+                    <h4>Giới thiệu:</h4>
+                    <p class="text-muted">@Model.Description</p>
 
                     <!-- Skills Start -->
                     <h4 class="mt-lg-5 mt-4">Skills :</h4>
@@ -98,7 +110,7 @@
                         <div class="col-lg-12 mt-4 pt-2">
                             <div class="d-flex">
                                 <div class="company-logo text-muted h6 me-3 text-center">
-                                    <img src="images/job/Codepen.svg" class="avatar avatar-md-sm mx-auto d-block mb-2" alt="">2017-18
+                                    2017-18
                                 </div>
                                 <div class="flex-1">
                                     <h5 class="title mb-0">Back-end Developer</h5>
@@ -111,7 +123,7 @@
                         <div class="col-lg-12 mt-4 pt-2">
                             <div class="d-flex">
                                 <div class="company-logo text-muted h6 me-3 text-center">
-                                    <img src="images/job/Circleci.svg" class="avatar avatar-md-sm mx-auto d-block mb-2" alt="">2014-17
+                                    2014-17
                                 </div>
                                 <div class="flex-1">
                                     <h5 class="title mb-0">Senior Web Designer</h5>
@@ -122,63 +134,6 @@
                         </div><!--end col-->
                     </div><!--end row-->
                     <!-- Experience End -->
-                    <!-- Start Projects Work -->
-                    <h4 class="mt-lg-5 mt-4">Projects :</h4>
-                    <div class="row">
-                        <div class="col-md-6 col-12 mt-4 pt-2">
-                            <div class="card border-0 work-container work-classic">
-                                <div class="card-body p-0">
-                                    <a href="portfolio-detail-one.html"><img src="images/work/1.jpg" class="img-fluid rounded work-image" alt=""></a>
-                                    <div class="content pt-3">
-                                        <h5 class="mb-0"><a href="portfolio-detail-one.html" class="text-dark title">Iphone mockup</a></h5>
-                                        <h6 class="text-muted tag mb-0">Branding</h6>
-                                    </div>
-                                </div>
-                            </div>
-                        </div><!--end col-->
-
-                        <div class="col-md-6 col-12 mt-4 pt-2">
-                            <div class="card border-0 work-container work-classic">
-                                <div class="card-body p-0">
-                                    <a href="portfolio-detail-one.html"><img src="images/work/2.jpg" class="img-fluid rounded work-image" alt=""></a>
-                                    <div class="content pt-3">
-                                        <h5 class="mb-0"><a href="portfolio-detail-one.html" class="text-dark title">Mockup Collection</a></h5>
-                                        <h6 class="text-muted tag mb-0">Mockup</h6>
-                                    </div>
-                                </div>
-                            </div>
-                        </div><!--end col-->
-
-                        <div class="col-md-6 col-12 mt-4 pt-2">
-                            <div class="card border-0 work-container work-classic">
-                                <div class="card-body p-0">
-                                    <a href="portfolio-detail-one.html"><img src="images/work/3.jpg" class="img-fluid rounded work-image" alt=""></a>
-                                    <div class="content pt-3">
-                                        <h5 class="mb-0"><a href="portfolio-detail-one.html" class="text-dark title">Abstract images</a></h5>
-                                        <h6 class="text-muted tag mb-0">Abstract</h6>
-                                    </div>
-                                </div>
-                            </div>
-                        </div><!--end col-->
-
-                        <div class="col-md-6 col-12 mt-4 pt-2">
-                            <div class="card border-0 work-container work-classic">
-                                <div class="card-body p-0">
-                                    <a href="portfolio-detail-one.html"><img src="images/work/4.jpg" class="img-fluid rounded work-image" alt=""></a>
-                                    <div class="content pt-3">
-                                        <h5 class="mb-0"><a href="portfolio-detail-one.html" class="text-dark title">Yellow bg with Books</a></h5>
-                                        <h6 class="text-muted tag mb-0">Books</h6>
-                                    </div>
-                                </div>
-                            </div>
-                        </div><!--end col-->
-                    </div><!--end row-->
-                    <!-- End Projects Work -->
-
-                    <div class="mt-4 pt-2">
-                        <a href="javascript:void(0)" class="btn btn-primary me-2"><i class="uil uil-user-check"></i> Hire me</a>
-                        <a href="javascript:void(0)" class="btn btn-outline-primary"><i class="uil uil-print"></i> Print CV</a>
-                    </div>
                 </div>
             </div><!--end col-->
         </div><!--enn row-->
@@ -189,51 +144,81 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content rounded shadow border-0">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalCenterTitle">Contact Me </h5>
+                <h5 class="modal-title" id="exampleModalCenterTitle">Cập nhật thông tin </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-4">
                 <div class="custom-form mt-3">
-                    <form method="post" name="myForm" onsubmit="return validateForm()">
+                    <form method="post">
                         <p id="error-msg" class="mb-0"></p>
                         <div id="simple-msg"></div>
                         <div class="row">
-                            <div class="col-12">
+                            <div class="col-md-12">
                                 <div class="mb-3">
-                                    <label class="form-label">Your Name <span class="text-danger">*</span></label>
+                                    <label for="formFile" class="form-label">Avatar :</label>
+                                    <input class="form-control" type="file" id="formFile">
+                                </div>
+                            </div><!--end col-->
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Họ & tên :<span class="text-danger">*</span></label>
                                     <div class="form-icon position-relative">
                                         <i data-feather="user" class="fea icon-sm icons"></i>
-                                        <input name="name" id="name" type="text" class="form-control ps-5" placeholder="Name :">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-12">
-                                <div class="mb-3">
-                                    <label class="form-label">Your Email <span class="text-danger">*</span></label>
-                                    <div class="form-icon position-relative">
-                                        <i data-feather="mail" class="fea icon-sm icons"></i>
-                                        <input name="email" id="email" type="email" class="form-control ps-5" placeholder="Email :">
+                                        <input value="@Model.Name" name="name" id="name" type="text" class="form-control ps-5" required placeholder="Họ & tên :">
                                     </div>
                                 </div>
                             </div><!--end col-->
-
-                            <div class="col-12">
+                            <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label">Subject</label>
+                                    <label class="form-label">Tiêu đề :</label>
                                     <div class="form-icon position-relative">
                                         <i data-feather="book" class="fea icon-sm icons"></i>
-                                        <input name="subject" id="subject" class="form-control ps-5" placeholder="subject :">
+                                        <input value="@Model.Title" name="title" type="text" class="form-control ps-5" placeholder="Tiêu đề :">
                                     </div>
                                 </div>
                             </div><!--end col-->
-
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Email :<span class="text-danger">*</span></label>
+                                    <div class="form-icon position-relative">
+                                        <i data-feather="mail" class="fea icon-sm icons"></i>
+                                        <input value="@Model.Email" name="email" id="email" type="email" class="form-control ps-5" required placeholder="Email :">
+                                    </div>
+                                </div>
+                            </div><!--end col-->
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Điện Thoại :<span class="text-danger">*</span></label>
+                                    <div class="form-icon position-relative">
+                                        <i data-feather="phone" class="fea icon-sm icons"></i>
+                                        <input value="@Model.Phone" name="phone" id="number" type="text" class="form-control ps-5" required placeholder="Số điện thoại :">
+                                    </div>
+                                </div>
+                            </div><!--end col-->
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Ngày sinh :<span class="text-danger">*</span></label>
+                                    <div class="form-icon position-relative">
+                                        <i data-feather="calendar" class="fea icon-sm icons"></i>
+                                        <input value="@Model.Birthday" name="birthday" type="date" id="subject" class="form-control ps-5" required placeholder="Ngày sinh :">
+                                    </div>
+                                </div>
+                            </div><!--end col-->
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <label class="form-label">Địa chỉ :</label>
+                                    <div class="form-icon position-relative">
+                                        <i data-feather="map-pin" class="fea icon-sm icons"></i>
+                                        <input value="@Model.Location" name="location" id="subject" class="form-control ps-5" placeholder="Địa chỉ :">
+                                    </div>
+                                </div>
+                            </div><!--end col-->
                             <div class="col-12">
                                 <div class="mb-3">
-                                    <label class="form-label">Comments <span class="text-danger">*</span></label>
+                                    <label class="form-label">Giới thiệu <span class="text-danger">*</span></label>
                                     <div class="form-icon position-relative">
                                         <i data-feather="message-circle" class="fea icon-sm icons clearfix"></i>
-                                        <textarea name="comments" id="comments" rows="4" class="form-control ps-5" placeholder="Message :"></textarea>
+                                        <textarea name="description" required id="comments" rows="4" class="form-control ps-5" placeholder="Giới thiệu đôi nét về bản thân...">@Model.Description</textarea>
                                     </div>
                                 </div>
                             </div>
@@ -241,7 +226,7 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="d-grid">
-                                    <button type="submit" id="submit" name="send" class="btn btn-primary">Send Message</button>
+                                    <button type="submit" id="submit" class="btn btn-primary">Cập nhật</button>
                                 </div>
                             </div><!--end col-->
                         </div><!--end row-->

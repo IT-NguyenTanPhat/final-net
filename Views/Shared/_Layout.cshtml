@@ -17,10 +17,15 @@
     <!-- Main Css -->
     <link href="~/css/style.min.css" rel="stylesheet" type="text/css" id="theme-opt" />
     <link href="~/css/colors/default.css" rel="stylesheet" id="color-opt">
-    <link rel="stylesheet" href="~/css/site.css" />
+    <link href='https://cdn.jsdelivr.net/npm/froala-editor@latest/css/froala_editor.pkgd.min.css' rel='stylesheet' type='text/css' />
+    <script type='text/javascript' src='https://cdn.jsdelivr.net/npm/froala-editor@latest/js/froala_editor.pkgd.min.js'></script>
 </head>
-
 <body>
+    <style>
+        #fr-logo {
+            display: none;
+        }
+    </style>
     <!-- Loader -->
     <!-- <div id="preloader">
         <div id="status">
@@ -38,9 +43,10 @@
             <a class="logo" href="/">
                 <h3 class="mt-2">Timviecit</h3>
             </a>
-            <div class="buy-button">
+            <div class="buy-button profile-con">
                 <a href="/auth/login" class="btn btn-primary">Đăng nhập</a>
             </div><!--end login button-->
+            
             <!-- End Logo container-->
             <div class="menu-extras">
                 <div class="menu-item">
@@ -61,11 +67,12 @@
                 <ul class="navigation-menu">
                     <li><a href="/" class="sub-menu-item">Trang chủ</a></li>
                     <li><a href="/jobs" class="sub-menu-item">Việc làm</a></li>
-                    <li><a href="#" class="sub-menu-item">Đăng tuyển</a></li>
+                    <li><a href="/auth/login" class="sub-menu-item posting-url">Đăng tuyển</a></li>
                 </ul><!--end navigation menu-->
-                <div class="buy-menu-btn d-none">
+                <div class="buy-menu-btn d-none profile-con">
                     <a href="/auth/login" class="btn btn-primary">Đăng nhập</a>
                 </div><!--end login button-->
+
             </div><!--end navigation-->
         </div><!--end container-->
     </header><!--end header-->
@@ -92,8 +99,8 @@
                 <div class="col-lg-3 col-md-4 col-12 mt-4 mt-sm-0 pt-2 pt-sm-0">
                     <h5 class="text-dark footer-head">Việc Làm</h5>
                     <ul class="list-unstyled footer-list mt-4">
-                        <li><a href="~/page-aboutus.html" class="text-muted"><i class="uil uil-angle-right-b me-1"></i> Tìm việc</a></li>
-                        <li><a href="~/portfolio-modern-three.html" class="text-muted"><i class="uil uil-angle-right-b me-1"></i> Đăng tuyển</a></li>
+                        <li><a href="/jobs" class="text-muted"><i class="uil uil-angle-right-b me-1"></i> Tìm việc</a></li>
+                        <li><a href="#" class="text-muted posting-url"><i class="uil uil-angle-right-b me-1"></i> Đăng tuyển</a></li>
                     </ul>
                 </div><!--end col-->
 
@@ -136,6 +143,10 @@
     <!-- Main Js -->
     <script src="~/js/plugins.init.js"></script><!--Note: All init js like tiny slider, counter, countdown, maintenance, lightbox, gallery, swiper slider, aos animation etc.-->
     <script src="~/js/app.js"></script><!--Note: All important javascript like page loader, menu, sticky menu, menu-toggler, one page menu etc. -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+    <script>
+        setTimeout(function () { $('.alert-dismissible').hide(); }, 4000);
+    </script>
     <script src="~/js/site.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

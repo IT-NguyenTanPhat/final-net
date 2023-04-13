@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace timviec.Models
@@ -6,17 +7,19 @@ namespace timviec.Models
     public class Job
     {
         [Key]
-        public int Id { get; set; }
+        public string? Id { get; set; }
         [Required]
         public string Name { get; set; }
+        public int? Salary { get; set; }
+        public int? Experience { get; set; }
+        public string Status { get; set; } = "pending";
+        public string Description { get; set; }
         [ForeignKey("Category")]
-        public int CategoryId { get; set; }
-        public virtual Category Category { get; set; }
+        public string? CategoryId { get; set; }
+        public virtual Category? Category { get; set; }
         [ForeignKey("Company")]
-        public int CompanyId { get; set; }
-        public virtual Company Company { get;set; }
-        [Required]
+        public string? CompanyId { get; set; }
+        public virtual Company? Company { get;set; }
         public DateTime PostedAt { get; set; } = DateTime.Now;
-
     }
 }

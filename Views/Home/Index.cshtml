@@ -1,4 +1,5 @@
-﻿@model IEnumerable<Category>
+﻿@using static timviec.Controllers.HomeController;
+@model Database
 @{
     ViewData["Title"] = "Trang chủ";
 }
@@ -10,14 +11,14 @@
                 <div class="title-heading text-center mt-4 mt-md-5 pt-md-5">
                     <div class="alert alert-light alert-pills" role="alert">
                         <span class="badge rounded-pill bg-success me-1">Bắt đầu</span>
-                        <span class="content"> <a href="page-job-apply.html" class="text-primary">Ứng tuyển</a> ngay !</span>
+                        <span class="content"> <a href="#" class="text-primary">Ứng tuyển</a> ngay !</span>
                     </div>
                     <h1 class="heading mb-3">Tuyển Dụng <span class="text-primary typewrite" data-period="2000" data-type='[ "Freelancer", "Developer", "Designer", "UX Developer", "ios Developer" ]'> <span class="wrap"></span> </span></h1>
-                    <form class="rounded p-4 mt-4 bg-white">
+                    <form class="rounded p-4 mt-4 bg-white" method="get" action="/jobs">
                         <div class="row text-start">
                             <div class="col-lg-5 col-md-4">
                                 <div class="mb-0">
-                                    <input type="text" class="form-control" required placeholder="Từ khóa">
+                                    <input type="text" name="key" class="form-control" required placeholder="Từ khóa">
                                 </div>
                             </div><!--end col-->
 
@@ -25,30 +26,32 @@
                                 <div class="row align-items-center">
                                     <div class="col-md-4 mt-4 mt-sm-0">
                                         <div class="mb-0">
-                                            <select class="form-control custom-select">
-                                                <option selected="">Địa điểm</option>
-                                                <option value="AF">Hồ Chí Minh</option>
-                                                <option value="AQ">Đà Nẵng</option>
-                                                <option value="AQ">Hà Nội</option>
+                                            <select name="location" class="form-control custom-select">
+                                                @foreach (var obj in Model.companies)
+                                                {
+                                                    @if (obj.Locaiton != null)
+                                                    {
+                                                        <option>@obj.Locaiton</option>
+                                                    }
+                                                }
                                             </select>
                                         </div>
                                     </div><!--end col-->
 
                                     <div class="col-md-4 mt-4 mt-sm-0">
                                         <div class="mb-0">
-                                            <select class="form-control custom-select">
-                                                <option selected="">Vị trí</option>
-                                                <option value="4">Senior</option>
-                                                <option value="1">Junior</option>
-                                                <option value="3">Fresher</option>
-                                                <option value="5">Intern</option>
+                                            <select name="category" class="form-control custom-select">
+                                                @foreach (var obj in Model.categories)
+                                                {
+                                                    <option value="@obj.Id">@obj.Name</option>
+                                                }
                                             </select>
                                         </div>
                                     </div><!--end col-->
 
                                     <div class="col-md-4 mt-4 mt-sm-0">
                                         <div class="d-grid">
-                                            <input type="submit" id="search" name="search" class="searchbtn btn btn-primary" value="Tìm kiếm">
+                                            <input type="submit" id="search" class="searchbtn btn btn-primary" value="Tìm kiếm">
                                         </div>
                                     </div><!--end col-->
                                 </div><!--end row-->
@@ -86,15 +89,15 @@
         </div><!--end row-->
 
         <div class="row">
-            @foreach (var obj in Model)
+            @foreach (var obj in Model.categories)
             {
                 <div class="col-lg-3 col-md-6 col-12 mt-4 pt-2">
                     <div class="card categories overflow-hidden rounded shadow border-0">
                         <img src="~/images/work/1.jpg" class="img-fluid" alt="">
                         <div class="card-body">
                             <ul class="list-unstyled d-flex justify-content-between mb-0">
-                                <li><a href="/jobs?c=@obj.Slug" class="title h6 text-dark">@obj.Name</a></li>
-                                <li class="h6 mb-0 jobs">125 Jobs</li>
+                                <li><a href="/jobs?c=@obj.Id" class="title h6 text-dark">@obj.Name</a></li>
+                                <li class="h6 mb-0 jobs">@obj.Jobs?.Count Jobs</li>
                             </ul>
                         </div>
                     </div>
@@ -114,80 +117,23 @@
         </div><!--end row-->
 
         <div class="row">
-            <div class="col-lg-4 col-md-6 col-12 mt-4 pt-2">
-                <a href="/jobs/1">
-                    <div class="d-flex key-feature align-items-center p-3 rounded shadow">
-                        <img src="~/images/job/Circleci.svg" class="avatar avatar-ex-sm" alt="">
-                        <div class="flex-1 ms-3">
-                            <h4 class="title mb-0 text-dark">Senior Web Developer</h4>
-                            <p class="text-muted mb-0">Hà Nội</p>
+            @foreach (var obj in Model.jobs)
+            {
+                <div class="col-lg-4 col-md-6 col-12 mt-4 pt-2">
+                    <a href="/jobs/@obj.Id">
+                        <div class="d-flex key-feature align-items-center p-3 rounded shadow">
+                            <img src="@obj.Company?.Avatar" class="avatar avatar-ex-sm" alt="">
+                            <div class="flex-1 ms-3">
+                                <h4 class="title mb-0 text-dark">@obj.Name</h4>
+                                <p class="text-muted mb-0">@obj.Company?.Locaiton</p>
+                            </div>
                         </div>
-                    </div>
-                </a>
-            </div><!--end col-->
-
-            <div class="col-lg-4 col-md-6 col-12 mt-4 pt-2">
-                <a href="page-job-detail.html">
-                    <div class="d-flex key-feature align-items-center p-3 rounded shadow">
-                        <img src="~/images/job/Codepen.svg" class="avatar avatar-ex-sm" alt="">
-                        <div class="flex-1 ms-3">
-                            <h4 class="title mb-0 text-dark">Front-End Developer</h4>
-                            <p class="text-muted mb-0">Hà Nội</p>
-                        </div>
-                    </div>
-                </a>
-            </div><!--end col-->
-
-            <div class="col-lg-4 col-md-6 col-12 mt-4 pt-2">
-                <a href="page-job-detail.html">
-                    <div class="d-flex key-feature align-items-center p-3 rounded shadow">
-                        <img src="~/images/job/Discord.svg" class="avatar avatar-ex-sm" alt="">
-                        <div class="flex-1 ms-3">
-                            <h4 class="title mb-0 text-dark">Back-End Developer</h4>
-                            <p class="text-muted mb-0">Hà Nội</p>
-                        </div>
-                    </div>
-                </a>
-            </div><!--end col-->
-
-            <div class="col-lg-4 col-md-6 col-12 mt-4 pt-2">
-                <a href="page-job-detail.html">
-                    <div class="d-flex key-feature align-items-center p-3 rounded shadow">
-                        <img src="~/images/job/Eslint.svg" class="avatar avatar-ex-sm" alt="">
-                        <div class="flex-1 ms-3">
-                            <h4 class="title mb-0 text-dark">UI Designer</h4>
-                            <p class="text-muted mb-0">Hà Nội</p>
-                        </div>
-                    </div>
-                </a>
-            </div><!--end col-->
-
-            <div class="col-lg-4 col-md-6 col-12 mt-4 pt-2">
-                <a href="page-job-detail.html">
-                    <div class="d-flex key-feature align-items-center p-3 rounded shadow">
-                        <img src="~/images/job/Gitlab.svg" class="avatar avatar-ex-sm" alt="">
-                        <div class="flex-1 ms-3">
-                            <h4 class="title mb-0 text-dark">UX Designer</h4>
-                            <p class="text-muted mb-0">Hà Nội</p>
-                        </div>
-                    </div>
-                </a>
-            </div><!--end col-->
-
-            <div class="col-lg-4 col-md-6 col-12 mt-4 pt-2">
-                <a href="page-job-detail.html">
-                    <div class="d-flex key-feature align-items-center p-3 rounded shadow">
-                        <img src="~/images/job/Mg.svg" class="avatar avatar-ex-sm" alt="">
-                        <div class="flex-1 ms-3">
-                            <h4 class="title mb-0 text-dark">Php Developer</h4>
-                            <p class="text-muted mb-0">Hà Nội</p>
-                        </div>
-                    </div>
-                </a>
-            </div><!--end col-->
+                    </a>
+                </div><!--end col-->
+            }
 
             <div class="col-12 text-center mt-4 pt-2">
-                <a href="page-jobs.html" class="btn btn-primary">Xem thêm <i class="uil uil-angle-right-b align-middle"></i></a>
+                <a href="/jobs" class="btn btn-primary">Xem thêm <i class="uil uil-angle-right-b align-middle"></i></a>
             </div>
         </div><!--end row-->
     </div><!--end container-->
@@ -205,73 +151,25 @@
         <div class="row">
             <div class="col-12 mt-4 pt-2">
                 <div class="tns-outer" id="tns1-ow"><div class="tns-liveregion tns-visually-hidden" aria-live="polite" aria-atomic="true">slide <span class="current">4 to 6</span>  of 6</div><div id="tns1-mw" class="tns-ovh"><div class="tns-inner" id="tns1-iw"><div class="tiny-three-item  tns-slider tns-carousel tns-subpixel tns-calc tns-horizontal" id="tns1" style="transform: translate3d(-50%, 0px, 0px);">
-                    <div class="tiny-slide tns-item" id="tns1-item2" aria-hidden="true" tabindex="-1">
-                        <div class="card client-testi border-0 text-center">
-                            <div class="card-body">
-                                <div class="position-relative">
-                                    <img src="https://th.bing.com/th/id/R.9a6056b939d720f9725b29fc8ccaecb7?rik=6E9PUA47vxUMGA&pid=ImgRaw&r=0" class="img-fluid avatar avatar-ex-large rounded-circle shadow mb-2" alt="">
-                                    <div class="social-icon team-icon mb-0">
-                                        <a href="javascript:void(0)" class="rounded btn btn-outline-primary">Xem hồ sơ</a>
-                                    </div><!--end icon-->
-                                </div>
-                                <div class="content pt-3 pb-3">
-                                    <h5 class="mb-0"><a href="javascript:void(0)" class="name text-dark">Đất Xanh Miền Nam</a></h5>
-                                    <small class="designation text-muted">Hồ Chí Minh</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="tiny-slide tns-item tns-slide-active" id="tns1-item3">
-                        <div class="card client-testi border-0 text-center">
-                            <div class="card-body">
-                                <div class="position-relative">
-                                                <img src="https://th.bing.com/th/id/OIP.9iENMeLAFRFISKVB2rbOcwHaFj?pid=ImgDet&rs=1" class="img-fluid avatar avatar-ex-large rounded-circle shadow mb-2" alt="">
-                                    <div class="social-icon team-icon mb-0">
-                                        <a href="javascript:void(0)" class="rounded btn btn-outline-primary">Xem hồ sơ</a>
-                                    </div><!--end icon-->
-                                </div>
-                                <div class="content pt-3 pb-3">
-                                    <h5 class="mb-0"><a href="javascript:void(0)" class="name text-dark">Lotte</a></h5>
-                                    <small class="designation text-muted">Hồ Chí Minh</small>
+                    @foreach (var obj in Model.companies)
+                    {
+                        <div class="tiny-slide tns-item" id="tns1-item2" aria-hidden="true" tabindex="-1">
+                            <div class="card client-testi border-0 text-center">
+                                <div class="card-body">
+                                    <div class="position-relative">
+                                        <img src="@obj.Avatar" class="img-fluid avatar avatar-ex-large rounded-circle shadow mb-2" alt="">
+                                        <div class="social-icon team-icon mb-0">
+                                            <a href="/companies/@obj.Id" class="rounded btn btn-outline-primary">Xem hồ sơ</a>
+                                        </div><!--end icon-->
+                                    </div>
+                                    <div class="content pt-3 pb-3">
+                                        <h5 class="mb-0"><a href="/companies/@obj.Id" class="name text-dark">@obj.Name</a></h5>
+                                        <small class="designation text-muted">@obj.Locaiton</small>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="tiny-slide tns-item tns-slide-active" id="tns1-item4">
-                        <div class="card client-testi border-0 text-center">
-                            <div class="card-body">
-                                <div class="position-relative">
-                                    <img src="https://play-lh.googleusercontent.com/dQbjuW6Jrwzavx7UCwvGzA_sleZe3-Km1KISpMLGVf1Be5N6hN6-tdKxE5RDQvOiGRg" class="img-fluid avatar avatar-ex-large rounded-circle shadow mb-2" alt="">
-                                    <div class="social-icon team-icon mb-0">
-                                        <a href="/companies/1" class="rounded btn btn-outline-primary">Xem hồ sơ</a>
-                                    </div><!--end icon-->
-                                </div>
-                                <div class="content pt-3 pb-3">
-                                    <h5 class="mb-0"><a href="javascript:void(0)" class="name text-dark">Momo</a></h5>
-                                    <small class="designation text-muted">Hồ Chí Minh</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="tiny-slide tns-item tns-slide-active" id="tns1-item5">
-                        <div class="card client-testi border-0 text-center">
-                            <div class="card-body">
-                                <div class="position-relative">
-                                                <img src="https://theleaders-online.com/wp-content/uploads/2019/11/fpt-software-launches-its-largest-campus-in-vietnam-expecting-30000-talents-by-2020-890x700_c.jpg" class="img-fluid avatar mb-2 avatar-ex-large rounded-circle shadow" alt="">
-                                    <div class="social-icon team-icon mb-0">
-                                        <a href="javascript:void(0)" class="rounded btn btn-outline-primary">Xem hồ sơ</a>
-                                    </div><!--end icon-->
-                                </div>
-                                <div class="content pt-3 pb-3">
-                                    <h5 class="mb-0"><a href="javascript:void(0)" class="name text-dark">FPT Software</a></h5>
-                                    <small class="designation text-muted">Nhiều tỉnh thành</small>
-                                </div>                                  
-                            </div>
-                        </div>
-                    </div>
+                    }
                 </div></div></div></div>
             </div><!--end col-->
         </div>
