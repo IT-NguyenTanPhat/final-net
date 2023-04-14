@@ -8,6 +8,8 @@ namespace timviec.Controllers
     {
         private readonly AppDbContext _db;
 
+        public static dynamic? account;
+
         public AuthController(AppDbContext db) { _db = db; }
 
         [HttpGet("/auth/login")]
@@ -30,16 +32,18 @@ namespace timviec.Controllers
             string email = Request.Form["email"].ToString();
             string password = Request.Form["password"].ToString();
 
-            var companyChecking = _db.companies.Any(c => c.Email == email && c.Password == password);
-            if (companyChecking)
+            var company = _db.companies.SingleOrDefault(c => c.Email == email && c.Password == password);
+            if (company != null)
             {
                 Response.Cookies.Append("user", email, options);
+                account = company;
                 return Redirect("/");
             }
-            var userChecking = _db.users.Any(c => c.Email == email && c.Password == password);
-            if (userChecking)
+            var user = _db.users.SingleOrDefault(c => c.Email == email && c.Password == password);
+            if (user != null)
             {
                 Response.Cookies.Append("user", email, options);
+                account = user;
                 return Redirect("/");
             }
             

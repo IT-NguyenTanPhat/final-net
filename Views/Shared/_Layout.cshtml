@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@using timviec.Controllers;
+@{
+    var account = AuthController.account;
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <!-- Mirrored from shreethemes.in/landrick/layouts/index-job.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 04 Jun 2021 14:06:11 GMT -->
 <head>
@@ -43,8 +48,40 @@
             <a class="logo" href="/">
                 <h3 class="mt-2">Timviecit</h3>
             </a>
-            <div class="buy-button profile-con">
-                <a href="/auth/login" class="btn btn-primary">Đăng nhập</a>
+            <div class="buy-button">
+                @if (account != null)
+                {
+                    <div class="btn-group dropdown-primary">
+                        <a class='dropdown-toggle hidden-arrow d-flex align-items-center'
+                       href='#'
+                       id='navbarDropdownMenuLink'
+                       role='button'
+                       data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                       style='gap: 10px'>
+                            <p class='my-0'>@account.Name</p>
+                            <img src='@account.Avatar'
+                             class='rounded-circle'
+                             height='35'
+                             alt=''
+                             loading='lazy' />
+                        </a>
+                        <div class="dropdown-menu" style="line-height:1.5">
+                            @if (account is User)
+                            {
+                                <a class='dropdown-item' href='/users/@account.Id'>Hồ sơ</a>
+                                <a class='dropdown-item' href='/users/@account.Id/history'>Lịch sử</a>
+                            } else
+                            {
+                                <a class='dropdown-item' href='/companies/@account.Id'>Hồ sơ</a>
+                            }
+                            <a class='dropdown-item' href='/auth/logout'>Đăng xuất</a>
+                        </div>
+                    </div>
+                }
+                else 
+                {
+                    <a href="/auth/login" class="btn btn-primary">Đăng nhập</a>
+                }
             </div><!--end login button-->
             
             <!-- End Logo container-->
@@ -67,10 +104,50 @@
                 <ul class="navigation-menu">
                     <li><a href="/" class="sub-menu-item">Trang chủ</a></li>
                     <li><a href="/jobs" class="sub-menu-item">Việc làm</a></li>
-                    <li><a href="/auth/login" class="sub-menu-item posting-url">Đăng tuyển</a></li>
+                    @if (account == null)
+                    {
+                        <li><a href="/auth/login" class="sub-menu-item">Tuyển dụng</a></li>
+                    }
+                    else
+                    {
+                        <li><a href="/companies/@account.Id/post" class="sub-menu-item">Tuyển dụng</a></li>
+                    }
                 </ul><!--end navigation menu-->
-                <div class="buy-menu-btn d-none profile-con">
-                    <a href="/auth/login" class="btn btn-primary">Đăng nhập</a>
+                <div class="buy-menu-btn d-none">
+                    @if (account != null)
+                    {
+                        <div class="btn-group dropdown-primary">
+                            <a class='dropdown-toggle hidden-arrow d-flex align-items-center'
+                           href='#'
+                           id='navbarDropdownMenuLink'
+                           role='button'
+                           data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                           style='gap: 10px'>
+                                <p class='my-0'>@account.Name</p>
+                                <img src='@account.Avatar'
+                                 class='rounded-circle'
+                                 height='35'
+                                 alt=''
+                                 loading='lazy' />
+                            </a>
+                            <div class="dropdown-menu" style="line-height:1.5">
+                                @if (account is User)
+                                {
+                                    <a class='dropdown-item' href='/users/@account.Id'>Hồ sơ</a>
+                                    <a class='dropdown-item' href='/users/@account.Id/history'>Lịch sử ứng tuyển</a>
+                                }
+                                else
+                                {
+                                    <a class='dropdown-item' href='/companies/@account.Id'>Hồ sơ</a>
+                                }
+                                <a class='dropdown-item' href='/auth/logout'>Đăng xuất</a>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <a href="/auth/login" class="btn btn-primary">Đăng nhập</a>
+                    }
                 </div><!--end login button-->
 
             </div><!--end navigation-->
@@ -100,7 +177,13 @@
                     <h5 class="text-dark footer-head">Việc Làm</h5>
                     <ul class="list-unstyled footer-list mt-4">
                         <li><a href="/jobs" class="text-muted"><i class="uil uil-angle-right-b me-1"></i> Tìm việc</a></li>
-                        <li><a href="#" class="text-muted posting-url"><i class="uil uil-angle-right-b me-1"></i> Đăng tuyển</a></li>
+                        @if (account != null)
+                        {
+                            <li><a href="/companies/@account.Id/post" class="text-muted"><i class="uil uil-angle-right-b me-1"></i> Tuyển dụng</a></li>
+                        } else
+                        {
+                            <li><a href="/auth/login" class="text-muted"><i class="uil uil-angle-right-b me-1"></i> Tuyền dụng</a></li>
+                        }
                     </ul>
                 </div><!--end col-->
 
@@ -147,7 +230,7 @@
     <script>
         setTimeout(function () { $('.alert-dismissible').hide(); }, 4000);
     </script>
-    <script src="~/js/site.js"></script>
+    <!-- <script src="~/js/site.js"></script>-->
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 

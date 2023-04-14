@@ -1,7 +1,8 @@
-﻿@model Company
+﻿@using timviec.Controllers;
+@model Company
 @{
     ViewData["title"] = Model.Name;
-    var isOwn = ViewBag.isOwn == true ? true : false;
+    var isOwn = AuthController.account?.Id == Model.Id ? true : false;
 }
 
 @if (TempData["success"] != null)

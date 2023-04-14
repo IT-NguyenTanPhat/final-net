@@ -37,49 +37,6 @@ namespace timviec.Controllers
             return View(model);
         }
 
-        [HttpGet("/{id?}")]
-        public IActionResult Profile(string? id)
-        {
-            if (_db.users.Find(id) != null)
-            {
-                return RedirectToAction("Profile", "User", new { id });
-
-            }
-            if (_db.companies.Find(id) != null)
-            {
-                return RedirectToAction("Profile", "Company", new { id });
-
-            }
-            return View("Error");
-        }
-
-        [HttpGet("/find-account")]
-        public IActionResult FindAccount()
-        {
-            if (Request.Query.TryGetValue("email", out var value))
-            {
-                var email = value.ToString();
-                var user = _db.users
-                    .Where(u => u.Email == email)
-                    .Select(u => new { u.Id, u.Name, u.Avatar, u.Email })
-                    .SingleOrDefault();
-                if (user != null)
-                {
-                    return Json(user);
-                }
-
-                var company = _db.companies
-                    .Where(u => u.Email == email)
-                    .Select(u => new { u.Id, u.Name, u.Avatar, u.Email })
-                    .SingleOrDefault();
-                if (company != null)
-                {
-                    return Json(company);
-                }
-            }
-            return BadRequest();
-        }
-
         [HttpGet("/get-locations")]
         public IActionResult GetLocations()
         {
