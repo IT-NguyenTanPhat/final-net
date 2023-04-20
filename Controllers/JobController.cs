@@ -28,6 +28,7 @@ namespace timviec.Controllers
         }
 
         [HttpGet("/jobs/{id?}")]
+        [HttpGet("/admin/jobs/{id?}")]
         public IActionResult Detail(string? id)
         {
             var job = _db.jobs.Include(j => j.Company).Include(j => j.Category).SingleOrDefault(j => j.Id == id);
@@ -45,9 +46,31 @@ namespace timviec.Controllers
         }
 
         [HttpGet("/admin/jobs")]
-        public IActionResult Dashboard()
+        public IActionResult Censor()
         {
-            return View();
+            var jobs = _db.jobs.Where(j => j.Status == "pending").Include(j => j.Company);
+            return View(jobs);
+        }
+
+        [HttpPost("/admin/jobs/{id?}")]
+        public IActionResult Censor(string? id)
+        {
+            var job = _db.jobs.Find(id);
+            if (job == null)
+            {
+                return View("Error");
+            }
+            var option = Request.Form["option"];
+            if (option == "ok")
+            {
+                job.Status = "censored";
+            }
+            if (option == "denied")
+            {
+                job.Status = "denied";
+            }
+            _db.SaveChanges();
+            return RedirectToAction("Censor");
         }
     }
 }

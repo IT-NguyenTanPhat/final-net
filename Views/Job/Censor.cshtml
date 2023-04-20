@@ -1,0 +1,77 @@
+﻿@model IEnumerable<Job>
+@{
+    Layout = "_Admin";
+    ViewData["title"] = "Kiểm duyệt việc làm";
+}
+
+@if (TempData["success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show w-25 position-absolute" role="alert" style="top:15px;right:15px;z-index:10000;">
+        @TempData["success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"> </button>
+    </div>
+}
+
+@if (TempData["error"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show w-25 position-absolute" role="alert" style="top:15px;right:15px;z-index:10000;">
+        @TempData["error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"> </button>
+    </div>
+}
+
+<section class='p-4 shadow rounded'>
+    <table id='table_id' class='display'>
+        <thead>
+            <tr>
+                <th>Tên công việc</th>
+                <th>Công ty</th>
+                <th>Ngày đăng</th>
+                <th>Thao tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var obj in Model)
+            {
+                <tr>
+                    <td>@obj.Name</td>
+                    <td>@obj.Company?.Name</td>
+                    <td>@obj.PostedAt.ToString("dd-MM-yyyy")</td>
+                    <td>
+                        <a href="/admin/jobs/@obj.Id"
+                       class="text-info me-2"><i class="fa-solid fa-circle-info"></i></a>
+                        <a href="#"
+                        onclick="$('#censor-form').attr('action', '/admin/jobs/@obj.Id'); $('#hidden-inp').val('ok')"
+                        class="text-success me-2"><i class="fa-solid fa-circle-check"></i></a>
+                        <a href="#" class="text-danger"
+                       onclick="$('#censor-form').attr('action', '/admin/jobs/@obj.Id'); $('#hidden-inp').val('denied')"
+                       data-mdb-toggle="modal" data-mdb-target="#comfirmModal"><i class="fa-solid fa-ban"></i></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</section>
+
+<!-- Modal -->
+<div class="modal fade" id="comfirmModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Kiểm duyệt việc làm?</h5>
+                <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" id="censor-form">
+                <div class="modal-body">
+                    <p>Bạn có chắc chắn?</p>
+                    <input type="hidden" id="hidden-inp" name="option" /> 
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Đóng</button>
+                    <button type="submit" class="btn btn-danger">Lưu</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+

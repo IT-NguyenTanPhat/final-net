@@ -23,6 +23,7 @@ namespace timviec.Controllers
         {
             CookieOptions options = new CookieOptions
             {
+                HttpOnly= true,
                 Expires = DateTimeOffset.UtcNow.AddMinutes(60),
                 SameSite = SameSiteMode.Strict,
                 Secure = true,

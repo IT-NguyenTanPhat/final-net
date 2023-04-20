@@ -10,6 +10,7 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(
     ));
 
 var app = builder.Build();
+var env = app.Services.GetRequiredService<IWebHostEnvironment>();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

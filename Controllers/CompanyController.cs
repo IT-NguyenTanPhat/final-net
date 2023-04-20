@@ -8,8 +8,12 @@ namespace timviec.Controllers
     public class CompanyController : Controller
     {
         private readonly AppDbContext _db;
+        private readonly IWebHostEnvironment _env;
 
-        public CompanyController(AppDbContext db) { _db = db; }
+        public CompanyController(AppDbContext db, IWebHostEnvironment env) {
+            _db = db;
+            _env = env;
+        }
 
         [HttpGet("/companies/{id?}")]
         public IActionResult Profile(string? id)
@@ -33,17 +37,56 @@ namespace timviec.Controllers
 
         [HttpPost("/companies/{Id?}")]
         [ValidateAntiForgeryToken]
-        public IActionResult Profile(Company company)
+        public IActionResult Profile(Company updatedCompany, IFormFile avatar)
         {
-            if (ModelState.IsValid)
+            try
             {
-                _db.companies.Update(company);
+                var originalCompany =  _db.companies.Find(updatedCompany.Id);
+
+                if (originalCompany == null)
+                {
+                    return View("Error");
+                }
+
+                var properties = updatedCompany.GetType().GetProperties();
+                foreach (var property in properties)
+                {
+                    var newValue = property.GetValue(updatedCompany);
+                    if (newValue != null)
+                    {
+                        property.SetValue(originalCompany, newValue);
+                    }
+                }
+
+                // Check if a file was actually uploaded
+                if (avatar != null)
+                {
+                    // Get the filename and extension
+                    var fileName = Path.GetFileName(avatar.FileName);
+                    var fileExtension = Path.GetExtension(fileName);
+
+                    // Generate a unique filename to prevent overwriting existing files
+                    var uniqueFileName = Guid.NewGuid().ToString() + fileExtension;
+                    originalCompany.Avatar = "/uploads/" + uniqueFileName;
+
+                    // Combine the path where you want to store the file with the unique filename
+                    var filePath = Path.Combine(_env.WebRootPath, "uploads", uniqueFileName);
+
+                    // Save the file to disk
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        avatar.CopyTo(stream);
+                    }
+                }   
                 _db.SaveChanges();
                 TempData["success"] = "Cập nhật hồ sơ thành công";
-                return View();
+                return RedirectToAction("Profile");
             }
-            TempData["error"] = "Cập nhật hồ sơ thất bại";
-            return View();
+             catch
+            {
+                TempData["error"] = "Cập nhật hồ sơ thất bại";
+                return RedirectToAction("Profile");
+            }
         }
 
         [HttpGet("/companies/{id?}/post")]

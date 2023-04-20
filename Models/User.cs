@@ -2,14 +2,6 @@
 
 namespace timviec.Models
 {
-    public class Experience
-    {
-        public string YearStart { get; set; }
-        public string YearEnd { get; set; }
-        public string Name { get; set; }
-        public string CompanyName { get; set; }
-        public string? Description { get; set; }
-    }
     public class User
     {
         [Key]
@@ -26,9 +18,6 @@ namespace timviec.Models
         public string? Phone { get; set; }
         public string? Description { get; set; }
         public string? Skills { get; set; }
-        //public Experience[]? Experiences { get; set; }
         public string Avatar { get; set; } = "/uploads/user.png";
     }
-
-    
 }
