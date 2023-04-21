@@ -1,7 +1,27 @@
-﻿@model Job
+﻿@using timviec.Controllers;
+@model Job
 @{
     ViewData["title"] = Model.Name;
+    var isOwn = AuthController.account?.Id == Model.Company?.Id ? true : false;
 }
+
+@if (TempData["success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show w-25 position-absolute" role="alert" style="top:15px;right:15px;z-index:1000;">
+        @TempData["success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"> </button>
+    </div>
+}
+
+@if (TempData["error"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show w-25 position-absolute" role="alert" style="top:15px;right:15px;z-index:1000;">
+        @TempData["error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"> </button>
+    </div>
+}
+
+
 <!-- Hero Start -->
 <section class="bg-half bg-light d-table w-100">
     <div class="container">
@@ -44,65 +64,189 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-4 col-md-5 col-12">
-                <div class="card sidebar sticky-bar rounded shadow border-0">
-                    <div class="card-body widget border-bottom">
-                        <h5 class="mb-0">Thông tin chi tiết</h5>
-                    </div>
-
-                    <div class="card-body">
-                        <div class="d-flex widget align-items-center">
-                            <i data-feather="user-check" class="fea icon-ex-md me-3"></i>
-                            <div class="flex-1">
-                                <h6 class="widget-title mb-1">Thể loại:</h6>
-                                <p class="text-primary mb-0">@Model.Category?.Name</p>
+                <div class="card sidebar sticky-bar rounded shadow border-0 mt-4">
+                    @if (isOwn)
+                    {
+                        <div class="card-body widget border-bottom ps-0">
+                            <div class="btn-group dropdown-primary float-start mt-2 me-1">
+                                <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i data-feather="more-vertical" class="fea icons"></i>
+                                </a>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#EditModal">Chỉnh sửa</a>
+                                    <a class="dropdown-item text-danger" href="#" data-bs-toggle="modal" data-bs-target="#ConfirmModal">Ngừng tuyển dụng</a>
+                                </div>
                             </div>
+                            <ul class="nav nav-pills nav-justified flex-column flex-sm-row rounded m-0" id="pills-tab" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link rounded active" id="pills-cloud-tab" data-bs-toggle="pill" href="#pills-cloud" role="tab" aria-controls="pills-cloud" aria-selected="true">
+                                        <div class="text-center py-2">
+                                            <h6 class="mb-0">Thông tin chi tiết</h6>
+                                        </div>
+                                    </a><!--end nav link-->
+                                </li><!--end nav item-->
+
+                                <li class="nav-item">
+                                    <a class="nav-link rounded" id="pills-smart-tab" data-bs-toggle="pill" href="#pills-smart" role="tab" aria-controls="pills-smart" aria-selected="false">
+                                        <div class="text-center py-2">
+                                            <h6 class="mb-0">DS ứng tuyển</h6>
+                                        </div>
+                                    </a><!--end nav link-->
+                                </li><!--end nav item-->
+
+                            </ul><!--end nav pills-->
                         </div>
 
-                        <div class="d-flex widget align-items-center mt-3">
-                            <i data-feather="map-pin" class="fea icon-ex-md me-3"></i>
-                            <div class="flex-1">
-                                <h6 class="widget-title mb-1">Địa điểm:</h6>
-                                <p class="text-primary mb-0">@Model.Company?.Locaiton</p>
+                        <div class="tab-content" id="pills-tabContent">
+                            <div class="tab-pane fade active show" id="pills-cloud" role="tabpanel" aria-labelledby="pills-cloud-tab">
+                                <div class="card-body">
+                                    <div class="d-flex widget align-items-center">
+                                        <i data-feather="user-check" class="fea icon-ex-md me-3"></i>
+                                        <div class="flex-1">
+                                            <h6 class="widget-title mb-1">Thể loại:</h6>
+                                            <p class="text-primary mb-0">@Model.Category?.Name</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex widget align-items-center mt-3">
+                                        <i data-feather="map-pin" class="fea icon-ex-md me-3"></i>
+                                        <div class="flex-1">
+                                            <h6 class="widget-title mb-1">Địa điểm:</h6>
+                                            <p class="text-primary mb-0">@Model.Company?.Locaiton</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex widget align-items-center mt-3">
+                                        <i data-feather="briefcase" class="fea icon-ex-md me-3"></i>
+                                        <div class="flex-1">
+                                            <h6 class="widget-title mb-1">Kinh nghiệm:</h6>
+                                            @if (Model.Experience == null)
+                                            {
+                                                <p class="text-primary mb-0">Không yêu cầu</p>
+                                            }
+                                            else
+                                            {
+                                                <p class="text-primary mb-0">@Model.Experience Năm</p>
+                                            }
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex widget align-items-center mt-3">
+                                        <i data-feather="dollar-sign" class="fea icon-ex-md me-3"></i>
+                                        <div class="flex-1">
+                                            <h6 class="widget-title mb-1">Lương:</h6>
+                                            @if (Model.Salary == null)
+                                            {
+                                                <p class="text-primary mb-0">Thương lượng</p>
+                                            }
+                                            else
+                                            {
+                                                <p class="text-primary mb-0">@Model.Salary VNĐ</p>
+                                            }
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex widget align-items-center mt-3">
+                                        <i data-feather="clock" class="fea icon-ex-md me-3"></i>
+                                        <div class="flex-1">
+                                            <h6 class="widget-title mb-1">Ngày đăng:</h6>
+                                            <p class="text-primary mb-0 mb-0">@Model.PostedAt.ToString("dd-MM-yyyy")</p>
+                                        </div>
+                                    </div>
+
+                                </div>
                             </div>
+                            <div class="tab-pane fade" id="pills-smart" role="tabpanel" aria-labelledby="pills-smart-tab">
+                                <div class="card-body">
+                                    <div class="row align-items-center">
+                                        <div class="col">
+                                            <a href="#">Nguyễn Văn A</a>
+                                        </div>
+                                        <div class="col text-end">
+                                            <a href="#" data-bs-toggle="modal" data-bs-target="#CoverModal">
+                                                <i data-feather="message-circle" class="fea icon-ex-md me-3"></i>
+                                            </a>
+                                            <p class="text-muted small">15-04-2022</p>
+                                        </div>
+                                    </div>
+                                    <div class="row align-items-center">
+                                        <div class="col">
+                                            <a href="/users/van-hau-edov">Nguyễn Văn A</a>
+                                        </div>
+                                        <div class="col text-end">
+                                            <a href="#" data-bs-toggle="modal" data-bs-target="#CoverModal">
+                                                <i data-feather="message-circle" class="fea icon-ex-md me-3"></i>
+                                            </a>
+                                            <p class="text-muted small">15-04-2022</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><!--end teb pane-->
                         </div>
 
-                        <div class="d-flex widget align-items-center mt-3">
-                            <i data-feather="briefcase" class="fea icon-ex-md me-3"></i>
-                            <div class="flex-1">
-                                <h6 class="widget-title mb-1">Kinh nghiệm:</h6>
-                                @if (Model.Experience == null)
-                                {
-                                    <p class="text-primary mb-0">Không yêu cầu</p>
-                                } else
-                                {
-                                    <p class="text-primary mb-0">@Model.Experience Năm</p>
-                                }
+                        <!--end teb pane-->
+                    }
+                    else
+                    {
+                        <div class="card-body widget border-bottom">
+                            <h5 class="mb-0">Thông tin chi tiết</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex widget align-items-center">
+                                <i data-feather="user-check" class="fea icon-ex-md me-3"></i>
+                                <div class="flex-1">
+                                    <h6 class="widget-title mb-1">Thể loại:</h6>
+                                    <p class="text-primary mb-0">@Model.Category?.Name</p>
+                                </div>
+                            </div>
+
+                            <div class="d-flex widget align-items-center mt-3">
+                                <i data-feather="map-pin" class="fea icon-ex-md me-3"></i>
+                                <div class="flex-1">
+                                    <h6 class="widget-title mb-1">Địa điểm:</h6>
+                                    <p class="text-primary mb-0">@Model.Company?.Locaiton</p>
+                                </div>
+                            </div>
+
+                            <div class="d-flex widget align-items-center mt-3">
+                                <i data-feather="briefcase" class="fea icon-ex-md me-3"></i>
+                                <div class="flex-1">
+                                    <h6 class="widget-title mb-1">Kinh nghiệm:</h6>
+                                    @if (Model.Experience == null)
+                                    {
+                                        <p class="text-primary mb-0">Không yêu cầu</p>
+                                    }
+                                    else
+                                    {
+                                        <p class="text-primary mb-0">@Model.Experience Năm</p>
+                                    }
+                                </div>
+                            </div>
+
+                            <div class="d-flex widget align-items-center mt-3">
+                                <i data-feather="dollar-sign" class="fea icon-ex-md me-3"></i>
+                                <div class="flex-1">
+                                    <h6 class="widget-title mb-1">Lương:</h6>
+                                    @if (Model.Salary == null)
+                                    {
+                                        <p class="text-primary mb-0">Thương lượng</p>
+                                    }
+                                    else
+                                    {
+                                        <p class="text-primary mb-0">@Model.Salary VNĐ</p>
+                                    }
+                                </div>
+                            </div>
+
+                            <div class="d-flex widget align-items-center mt-3">
+                                <i data-feather="clock" class="fea icon-ex-md me-3"></i>
+                                <div class="flex-1">
+                                    <h6 class="widget-title mb-1">Ngày đăng:</h6>
+                                    <p class="text-primary mb-0 mb-0">@Model.PostedAt.ToString("dd-MM-yyyy")</p>
+                                </div>
                             </div>
                         </div>
-
-                        <div class="d-flex widget align-items-center mt-3">
-                            <i data-feather="dollar-sign" class="fea icon-ex-md me-3"></i>
-                            <div class="flex-1">
-                                <h6 class="widget-title mb-1">Lương:</h6>
-                                @if (Model.Salary == null)
-                                {
-                                    <p class="text-primary mb-0">Thương lượng</p>
-                                } else
-                                {
-                                    <p class="text-primary mb-0">@Model.Salary VNĐ</p>
-                                }
-                            </div>
-                        </div>
-
-                        <div class="d-flex widget align-items-center mt-3">
-                            <i data-feather="clock" class="fea icon-ex-md me-3"></i>
-                            <div class="flex-1">
-                                <h6 class="widget-title mb-1">Ngày đăng:</h6>
-                                <p class="text-primary mb-0 mb-0">@Model.PostedAt.ToString("dd-MM-yyyy")</p>
-                            </div>
-                        </div>
-
-                    </div>
+                    }
                 </div>
             </div><!--end col-->
 
@@ -110,12 +254,137 @@
                 <div class="ms-lg-4">
                     @Html.Raw(@Model.Description)
 
-                    <div class="mt-4">
-                        <a href="/jobs/1/apply" class="btn btn-outline-primary">Ứng tuyển <i class="mdi mdi-send"></i></a>
-                    </div>
+                    @if (!isOwn)
+                    {
+                        <div class="mt-4">
+                            <a href="/jobs/1/apply" class="btn btn-outline-primary">Ứng tuyển <i class="mdi mdi-send"></i></a>
+                        </div>
+                    }
                 </div>
             </div><!--end col-->
         </div><!--end row-->
     </div><!--end container-->
 </section><!--end section-->
+
+<!-- Modal Content Start -->
+<div class="modal fade" id="CoverModal" tabindex="-1" aria-labelledby="LoginForm-title" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded shadow border-0">
+            <div class="modal-header border-bottom">
+                <h5 class="modal-title" id="LoginForm-title">Thư Giới Thiệu</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="bg-white p-3 rounded box-shadow">
+                    <p class="text-muted mb-0"> a neutral judgement on the visual impact and readability of the typefaces (typography), or the distribution of text on the page (layout or type area). For this reason, dummy text usually consists of a more or less random series of words or syllables. This prevents repetitive patterns from impairing the overall visual impression and facilitates the comparison of different typefaces. Furthermore, it is advantageous when the dummy text is relatively realistic so that the layout impression of the final publication is not compromised.</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="ConfirmModal" tabindex="-1" aria-labelledby="LoginForm-title" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded shadow border-0">
+            <div class="modal-header border-bottom">
+                <h5 class="modal-title" id="LoginForm-title">Ngừng tuyển dụng</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="bg-white p-3 rounded box-shadow">
+                    <p class="text-muted mb-0">Bạn có chắc chắn muốn ngừng tuyển dụng việc làm này?</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-danger">Xác nhận</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="EditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content rounded shadow border-0">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalCenterTitle">Chỉnh sửa thông tin </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <form method="post">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Tên :<span class="text-danger">*</span></label>
+                                <div class="form-icon position-relative">
+                                    <i data-feather="user" class="fea icon-sm icons"></i>
+                                    <input name="name" required id="name" type="text" class="form-control ps-5" placeholder="Tên :">
+                                </div>
+                            </div>
+                        </div><!--end col-->
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Kinh nghiệm :</label>
+                                <div class="form-icon position-relative">
+                                    <i data-feather="briefcase" class="fea icon-sm icons"></i>
+                                    <input name="experience" id="email" type="number" min="0" class="form-control ps-5" placeholder="Số năm kinh nghiệm :">
+                                </div>
+                            </div>
+                        </div><!--end col-->
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Lương :</label>
+                                <div class="form-icon position-relative">
+                                    <i data-feather="dollar-sign" class="fea icon-sm icons"></i>
+                                    <input name="salary" id="number" type="number" min="0" class="form-control ps-5" placeholder="Lương :">
+                                </div>
+                            </div>
+                        </div><!--end col-->
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Hình thức :<span class="text-danger">*</span></label>
+                                <select class="form-control custom-select" required name="category" id="Sortbylist-Shop">
+                                    @*@foreach (var obj in Model)
+                                    {
+                                        <option value="@obj.Id">@obj.Name</option>
+                                    }
+                                    *@
+                                </select>
+                            </div>
+                        </div><!--end col-->
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                <label class="form-label">Mô tả :<span class="text-danger">*</span></label>
+                                <div class="form-icon position-relative">
+                                    <textarea name="description" required id="editor"></textarea>
+                                </div>
+                            </div>
+                        </div><!--end col-->
+                    </div><!--end row-->
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <input type="submit" class="submitBnt btn btn-primary" value="Cập nhật">
+                        </div><!--end col-->
+                    </div><!--end row-->
+                </form><!--end form-->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal Content End -->
+
+<script>
+    //initialize the editor
+    var editor = new FroalaEditor('#editor', {
+        name: "description",
+        toolbarInline: true,
+        charCounterCount: false,
+        toolbarVisibleWithoutSelection: true,
+        placeholderText: "Giới thiệu về công ty như lịch sử, chuyên môn, môi trường,...",
+    });
+</script>
+
 <!-- Job Detail End -->

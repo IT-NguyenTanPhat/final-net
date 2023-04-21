@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Timers;
 using timviec.Models;
 using Slug = timviec.Utils.Slug;
+using Timer = System.Timers.Timer;
 
 namespace timviec.Controllers
 {
@@ -9,8 +11,19 @@ namespace timviec.Controllers
         private readonly AppDbContext _db;
 
         public static dynamic? account;
+        private Timer timer;
+        private int interval = 60000;
 
-        public AuthController(AppDbContext db) { _db = db; }
+        public AuthController(AppDbContext db) { 
+            _db = db;
+            timer = new Timer();
+            timer.Interval = interval;
+            timer.Elapsed += OnTimerElapsed;
+        }
+        private void OnTimerElapsed(object sender, ElapsedEventArgs e)
+        {
+            account = null;
+        }
 
         [HttpGet("/auth/login")]
         public IActionResult Login()
@@ -38,6 +51,7 @@ namespace timviec.Controllers
             {
                 Response.Cookies.Append("user", email, options);
                 account = company;
+                timer.Start();
                 return Redirect("/");
             }
             var user = _db.users.SingleOrDefault(c => c.Email == email && c.Password == password);
@@ -45,6 +59,7 @@ namespace timviec.Controllers
             {
                 Response.Cookies.Append("user", email, options);
                 account = user;
+                timer.Start();
                 return Redirect("/");
             }
             
