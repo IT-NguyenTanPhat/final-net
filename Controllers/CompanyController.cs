@@ -25,10 +25,6 @@ namespace timviec.Controllers
 
             if (company != null)
             {
-                if (Request.Cookies["user"] == company.Email)
-                {
-                    ViewBag.isOwn = true;
-                }
                 return View(company);
             }
             ViewData["message"] = "Xin lỗi, không tìm thấy công ty này.";

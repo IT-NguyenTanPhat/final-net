@@ -3,6 +3,7 @@
 @{
     ViewData["title"] = Model.Name;
     var isOwn = AuthController.account?.Id == Model.Company?.Id ? true : false;
+    isOwn = true;
 }
 
 @if (TempData["success"] != null)
@@ -64,7 +65,7 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-4 col-md-5 col-12">
-                <div class="card sidebar sticky-bar rounded shadow border-0 mt-4">
+                <div class="card sidebar sticky-bar rounded shadow border-0">
                     @if (isOwn)
                     {
                         <div class="card-body widget border-bottom ps-0">
@@ -168,7 +169,12 @@
                                             </a>
                                             <p class="text-muted small">15-04-2022</p>
                                         </div>
+                                        <div class="d-flex">
+                                            <a href="#" class="btn btn-pills btn-soft-success me-2 btn-sm">Duyệt</a>
+                                            <a href="#" class="btn btn-pills btn-soft-danger btn-sm">Từ chối</a>
+                                        </div>
                                     </div>
+                                    <hr />
                                     <div class="row align-items-center">
                                         <div class="col">
                                             <a href="/users/van-hau-edov">Nguyễn Văn A</a>
@@ -178,6 +184,10 @@
                                                 <i data-feather="message-circle" class="fea icon-ex-md me-3"></i>
                                             </a>
                                             <p class="text-muted small">15-04-2022</p>
+                                        </div>
+                                        <div class="d-flex">
+                                            <a href="#" class="btn btn-pills btn-soft-success me-2 btn-sm">Duyệt</a>
+                                            <a href="#" class="btn btn-pills btn-soft-danger btn-sm">Từ chối</a>
                                         </div>
                                     </div>
                                 </div>

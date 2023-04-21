@@ -15,10 +15,6 @@ namespace timviec.Controllers
             var user = _db.users.Find(id);
             if (user != null)
             {
-                if (user.Email == Request.Cookies["user"])
-                {
-                    ViewBag.isOwn = true;
-                }
                 return View(user);
             }
             return View("Error");
@@ -37,6 +33,18 @@ namespace timviec.Controllers
             }
             TempData["error"] = "Cập nhật hồ sơ thất bại";
             return View();
+        }
+
+        [HttpGet("/users/{id?}/applied-job")]
+        public IActionResult AppliedJob(string? id)
+        {
+                return View();
+        }
+
+        [HttpGet("/users/{id?}/marked-job")]
+        public IActionResult MarkedJob(string? id)
+        {
+                return View();
         }
     }
 }

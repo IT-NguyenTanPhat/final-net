@@ -33,7 +33,7 @@
         .short-text {
             overflow: hidden;
             text-overflow: ellipsis;
-            width: 250px;
+            max-width: 250px;
             white-space: nowrap;
         }
     </style>
@@ -75,7 +75,8 @@
                             @if (account is User)
                             {
                                 <a class='dropdown-item' href='/users/@account.Id'>Hồ sơ</a>
-                                <a class='dropdown-item' href='/users/@account.Id/history'>Lịch sử</a>
+                                <a class='dropdown-item' href='/users/@account.Id/applied-job'>Đã ứng tuyển</a>
+                                <a class='dropdown-item' href='/users/@account.Id/marked-job'>Đã lưu</a>
                             } else
                             {
                                 <a class='dropdown-item' href='/companies/@account.Id'>Hồ sơ</a>
