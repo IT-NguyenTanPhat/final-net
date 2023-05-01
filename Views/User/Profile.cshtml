@@ -165,7 +165,7 @@
                                     <label class="form-label">Email :<span class="text-danger">*</span></label>
                                     <div class="form-icon position-relative">
                                         <i data-feather="mail" class="fea icon-sm icons"></i>
-                                        <input value="@Model.Email" name="email" id="email" type="email" class="form-control ps-5" required placeholder="Email :">
+                                        <input value="@Model.Email" name="email" id="email" type="email" class="form-control ps-5" required placeholder="Email :" />
                                     </div>
                                 </div>
                             </div><!--end col-->
@@ -174,7 +174,7 @@
                                     <label class="form-label">Điện Thoại :<span class="text-danger">*</span></label>
                                     <div class="form-icon position-relative">
                                         <i data-feather="phone" class="fea icon-sm icons"></i>
-                                        <input value="@Model.Phone" name="phone" id="number" type="text" class="form-control ps-5" required placeholder="Số điện thoại :">
+                                        <input value="@Model.Phone" name="phone" id="number" type="text" class="form-control ps-5" required placeholder="Số điện thoại :" />
                                     </div>
                                 </div>
                             </div><!--end col-->
@@ -183,7 +183,7 @@
                                     <label class="form-label">Ngày sinh :<span class="text-danger">*</span></label>
                                     <div class="form-icon position-relative">
                                         <i data-feather="calendar" class="fea icon-sm icons"></i>
-                                        <input value="@Model.Birthday" name="birthday" type="date" id="subject" class="form-control ps-5" required placeholder="Ngày sinh :">
+                                        <input value="@Model.Birthday?.ToString("yyyy-MM-dd")" name="birthday" type="date" id="subject" class="form-control ps-5" required />
                                     </div>
                                 </div>
                             </div><!--end col-->
@@ -192,7 +192,7 @@
                                     <label class="form-label">Địa chỉ :</label>
                                     <div class="form-icon position-relative">
                                         <i data-feather="map-pin" class="fea icon-sm icons"></i>
-                                        <input value="@Model.Location" name="location" id="subject" class="form-control ps-5" placeholder="Địa chỉ :">
+                                        <input value="@Model.Location" name="location" id="subject" class="form-control ps-5" placeholder="Địa chỉ :" />
                                     </div>
                                 </div>
                             </div><!--end col-->
