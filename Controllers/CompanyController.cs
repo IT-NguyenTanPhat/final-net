@@ -19,7 +19,7 @@ namespace timviec.Controllers
         public IActionResult Profile(string? id)
         {
             var company = _db.companies
-                     .Include(c => c.Jobs)
+                     .Include(c => c.Jobs.Take(4))
                      .ThenInclude(j => j.Category)
                      .FirstOrDefault(c => c.Id == id);
 
@@ -120,6 +120,38 @@ namespace timviec.Controllers
             }
             TempData["error"] = "Vui lòng thử lại";
             return RedirectToAction("PostJob");
+        }
+
+        [HttpPost("/companies/applies/{id?}")]
+        public IActionResult Censor(int? id)
+        {
+            var apply = _db.applies.Find(id);
+            if (apply == null)
+            {
+                return View("Error");
+            }
+            var option = Request.Form["option"];
+            apply.Status = option;
+            _db.SaveChanges();
+            return Redirect($"/jobs/{apply.JobId}");
+        }
+
+        [HttpPost("/companies/jobs/{id?}")]
+        public IActionResult StopHiring(string? id)
+        {
+            try
+            {
+                var job = _db.jobs.Find(id);
+                _db.jobs.Remove(job);
+                _db.SaveChanges();
+                TempData["success"] = "Ngừng tuyển dụng thành công.";
+                return Redirect($"/companies/{job.CompanyId}");
+            }
+            catch
+            {
+                TempData["error"] = "Thất bại. Vui lòng thử lại.";
+                return Redirect($"/jobs/{id}");
+            }
         }
     }
 }

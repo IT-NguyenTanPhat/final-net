@@ -1,8 +1,9 @@
-﻿@using timviec.Controllers;
-@model User
+﻿@using static timviec.Controllers.HomeController;
+@using timviec.Controllers;
+@model Database
 @{
-    ViewData["title"] = Model.Name;
-    var isOwn = AuthController.account?.Id == Model.Id ? true : false;
+    ViewData["title"] = Model.user.Name;
+    var isOwn = AuthController.account?.Id == Model.user.Id ? true : false;
 }
 
 @if (TempData["success"] != null)
@@ -33,18 +34,18 @@
             <div class="col-lg-4 col-md-5 col-12">
                 <div class="card job-profile shadow border-0">
                     <div class="text-center py-5 border-bottom rounded-top">
-                        <img src="@Model.Avatar" class="avatar avatar-medium mx-auto rounded-circle shadow d-block" alt="">
-                        <h5 class="mt-3 mb-0">@Model.Name</h5>
-                        <p class="text-muted mb-0">@Model.Title</p>
+                        <img src="@Model.user.Avatar" class="avatar avatar-medium mx-auto rounded-circle shadow d-block" alt="">
+                        <h5 class="mt-3 mb-0">@Model.user.Name</h5>
+                        <p class="text-muted mb-0">@Model.user.Title</p>
                     </div>
                     <div class="card-body">
                         <h5 class="card-title">Thông tin cá nhân :</h5>
 
                         <ul class="list-unstyled">
-                            <li class="h6"><i data-feather="mail" class="fea icon-sm text-warning me-3"></i><span class="text-muted">Email :</span> @Model.Email</li>
-                            <li class="h6"><i data-feather="gift" class="fea icon-sm text-warning me-3"></i><span class="text-muted">Ngày sinh :</span> @Model.Birthday?.ToString("dd-MM-yyyy")</li>
-                            <li class="h6"><i data-feather="home" class="fea icon-sm text-warning me-3"></i><span class="text-muted">Địa chỉ :</span> @Model.Location</li>
-                            <li class="h6"><i data-feather="phone" class="fea icon-sm text-warning me-3"></i><span class="text-muted">Số điện thoại :</span> @Model.Phone</li>
+                            <li class="h6"><span class="text-muted">Email :</span> @Model.user.Email</li>
+                            <li class="h6"><i data-feather="gift" class="fea icon-sm text-warning me-3"></i><span class="text-muted">Ngày sinh :</span> @Model.user.Birthday?.ToString("dd-MM-yyyy")</li>
+                            <li class="h6"><i data-feather="home" class="fea icon-sm text-warning me-3"></i><span class="text-muted">Địa chỉ :</span> @Model.user.Location</li>
+                            <li class="h6"><i data-feather="phone" class="fea icon-sm text-warning me-3"></i><span class="text-muted">Số điện thoại :</span> @Model.user.Phone</li>
 
                             <li>
                                 <ul class="list-unstyled social-icon mb-0 mt-4">
@@ -58,9 +59,18 @@
                                 </ul><!--end icon-->
                             </li>
                         </ul>
-                        <div class="d-grid">
-                            <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#Contactme" class="btn btn-primary"><i class="uil uil-envelope align-middle"></i> Chỉnh sửa</a>
-                        </div>
+                        @if (isOwn)
+                        {
+                            <div class="d-grid">
+                                <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#Contactme" class="btn btn-primary"><i class="uil uil-envelope align-middle"></i> Chỉnh sửa</a>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="d-grid">
+                                <a href="mailto:@Model.user.Email" class="btn btn-primary"><i data-feather="mail" class="fea icon-sm me-2"></i> Liên hệ</a>
+                            </div>
+                        }
                     </div>
                 </div>
             </div><!--end col-->
@@ -68,54 +78,73 @@
             <div class="col-lg-8 col-md-7 col-12 mt-4 mt-sm-0 pt-2 pt-sm-0">
                 <div class="ms-lg-4">
                     <h4>Giới thiệu:</h4>
-                    <p class="text-muted">@Model.Description</p>
+                    <p class="text-muted">@Model.user.Description</p>
 
                     <div class="mt-lg-5 mt-4">
                         <h4>CV:</h4>
-                        <a href="#" download="">yourcv.pdf</a>
+                        <a href="@Model.user.CV" download="">Nhấn vào để tải xuống CV.</a>
                     </div>
 
-                    <div class="mt-lg-5 mt-4">
+                    @if (isOwn)
+                    {
+                        <div class="mt-lg-5 mt-4">
                         <h4>Lịch sử ứng tuyển:</h4>
                         <div class="row">
-                            @*@foreach (var obj in Model.jobs)*@
-                            <div class="col-lg-4 col-md-6 col-12 mt-4 pt-2">
-                                <a href="#">
+                            @foreach (var obj in Model.user.Applies)
+                            {
+                                <div class="col-lg-6 col-md-6 col-12 mb-3">
                                     <div class="d-flex key-feature align-items-center p-3 rounded shadow">
-                                        <img src="~/uploads/1ca8c110-dd24-4845-88f8-4607565ffa9d.png" class="avatar avatar-ex-sm" alt="">
-                                        <div class="flex-1 ms-3">
-                                            <h4 class="title mb-0 text-dark short-text">123</h4>
-                                            <p class="text-muted mb-0">12/04/2022</p>
+                                        <a href="/companies/@obj.Job.CompanyId"><img src="@obj.Job.Company.Avatar" class="avatar avatar-ex-sm" alt=""></a>
+                                        <div class="ms-3">
+                                            <a href="/jobs/@obj.JobId"><h4 class="title mb-0 text-dark short-text tns-autowidth">@obj.Job.Name</h4></a>
+                                            <p class="text-muted mb-0">Ứng tuyển : @obj.Time.ToString("dd-MM-yyyy")</p>
+                                            @if (obj.Status.Equals("pending"))
+                                            {
+                                                <span class="badge rounded-pill bg-warning"> Chờ duyệt </span>
+                                            }
+                                            else if (obj.Status.Equals("accepted"))
+                                            {
+                                                <span class="badge rounded-pill bg-success"> Chấp nhận </span>
+                                            }
+                                            else if (obj.Status.Equals("denied"))
+                                            {
+                                                <span class="badge rounded-pill bg-danger"> Từ chối </span>
+                                            }
                                         </div>
                                     </div>
-                                </a>
-                            </div><!--end col-->
-                            <div class="col-12 text-center mt-4 pt-2">
-                                <a href="/users/id/history" class="btn btn-primary">Xem thêm <i class="uil uil-angle-right-b align-middle"></i></a>
-                            </div>
+                                </div> <!--end col-->
+                            }
                         </div><!--end row-->
-                    </div>
 
-                    <div class="mt-lg-5 mt-4">
-                        <h4>Việc làm đã lưu:</h4>
-                        <div class="row">
-                            @*@foreach (var obj in Model.jobs)*@
-                                <div class="col-lg-4 col-md-6 col-12 mt-4 pt-2">
-                                    <a href="#">
-                                        <div class="d-flex key-feature align-items-center p-3 rounded shadow">
-                                            <img src="~/uploads/1ca8c110-dd24-4845-88f8-4607565ffa9d.png" class="avatar avatar-ex-sm" alt="">
-                                            <div class="flex-1 ms-3">
-                                                <h4 class="title mb-0 text-dark short-text">123</h4>
-                                                <p class="text-muted mb-0">12/04/2022</p>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div><!--end col-->
-                            <div class="col-12 text-center mt-4 pt-2">
-                                <a href="/users/id/history" class="btn btn-primary">Xem thêm <i class="uil uil-angle-right-b align-middle"></i></a>
-                            </div>
+                        <div class="row mt-4">
+                            <!-- PAGINATION START -->
+                            <div class="col-12">
+                                <ul class="pagination justify-content-center mb-0">
+                                    @if (Model.page.Previous != null)
+                                    {
+                                        <li class="page-item"><a class="page-link" href="/users/@Model.user.Id&p=@Model.page.Previous" aria-label="Previous">Trước</a></li>
+                                        <li class="page-item"><a class="page-link" href="/users/@Model.user.Id&p=@Model.page.Previous">@Model.page.Previous</a></li>
+                                    }
+                                    else
+                                    {
+                                        <li class="page-item"><a class="page-link" href="javascript:void(0)" aria-label="Previous">Trước</a></li>
+                                    }
+                                    <li class="page-item active"><a class="page-link" href="/users/@Model.user.Id&p=@Model.page.Current">@Model.page.Current</a></li>
+                                    @if (Model.page.Next != null)
+                                    {
+                                        <li class="page-item"><a class="page-link" href="/users/@Model.user.Id&p=@Model.page.Next">@Model.page.Next</a></li>
+                                        <li class="page-item"><a class="page-link" href="/users/@Model.user.Id&p=@Model.page.Next" aria-label="Next">Sau</a></li>
+                                    }
+                                    else
+                                    {
+                                        <li class="page-item"><a class="page-link" href="javascript:void(0)" aria-label="Next">Sau</a></li>
+                                    }
+                                </ul>
+                            </div><!--end col-->
+                            <!-- PAGINATION END -->
                         </div><!--end row-->
                     </div>
+                    }
                 </div>
             </div><!--end col-->
         </div><!--enn row-->
@@ -132,14 +161,14 @@
             </div>
             <div class="modal-body p-4">
                 <div class="custom-form mt-3">
-                    <form method="post">
+                    <form method="post" enctype="multipart/form-data">
                         <p id="error-msg" class="mb-0"></p>
                         <div id="simple-msg"></div>
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="mb-3">
                                     <label for="formFile" class="form-label">Avatar :</label>
-                                    <input class="form-control" type="file" id="formFile">
+                                    <input class="form-control" name="avatar" type="file" id="formFile">
                                 </div>
                             </div><!--end col-->
                             <div class="col-md-6">
@@ -147,7 +176,7 @@
                                     <label class="form-label">Họ & tên :<span class="text-danger">*</span></label>
                                     <div class="form-icon position-relative">
                                         <i data-feather="user" class="fea icon-sm icons"></i>
-                                        <input value="@Model.Name" name="name" id="name" type="text" class="form-control ps-5" required placeholder="Họ & tên :">
+                                        <input value="@Model.user.Name" name="name" id="name" type="text" class="form-control ps-5" required placeholder="Họ & tên :">
                                     </div>
                                 </div>
                             </div><!--end col-->
@@ -156,7 +185,7 @@
                                     <label class="form-label">Tiêu đề :</label>
                                     <div class="form-icon position-relative">
                                         <i data-feather="book" class="fea icon-sm icons"></i>
-                                        <input value="@Model.Title" name="title" type="text" class="form-control ps-5" placeholder="Tiêu đề :">
+                                        <input value="@Model.user.Title" name="title" type="text" class="form-control ps-5" placeholder="Tiêu đề :">
                                     </div>
                                 </div>
                             </div><!--end col-->
@@ -165,7 +194,7 @@
                                     <label class="form-label">Email :<span class="text-danger">*</span></label>
                                     <div class="form-icon position-relative">
                                         <i data-feather="mail" class="fea icon-sm icons"></i>
-                                        <input value="@Model.Email" name="email" id="email" type="email" class="form-control ps-5" required placeholder="Email :" />
+                                        <input value="@Model.user.Email" name="email" id="email" type="email" class="form-control ps-5" required placeholder="Email :" />
                                     </div>
                                 </div>
                             </div><!--end col-->
@@ -174,7 +203,7 @@
                                     <label class="form-label">Điện Thoại :<span class="text-danger">*</span></label>
                                     <div class="form-icon position-relative">
                                         <i data-feather="phone" class="fea icon-sm icons"></i>
-                                        <input value="@Model.Phone" name="phone" id="number" type="text" class="form-control ps-5" required placeholder="Số điện thoại :" />
+                                        <input value="@Model.user.Phone" name="phone" id="number" type="text" class="form-control ps-5" required placeholder="Số điện thoại :" />
                                     </div>
                                 </div>
                             </div><!--end col-->
@@ -183,17 +212,23 @@
                                     <label class="form-label">Ngày sinh :<span class="text-danger">*</span></label>
                                     <div class="form-icon position-relative">
                                         <i data-feather="calendar" class="fea icon-sm icons"></i>
-                                        <input value="@Model.Birthday?.ToString("yyyy-MM-dd")" name="birthday" type="date" id="subject" class="form-control ps-5" required />
+                                        <input value="@Model.user.Birthday?.ToString("yyyy-MM-dd")" name="birthday" type="date" id="subject" class="form-control ps-5" required />
+                                    </div>
+                                </div>
+                            </div><!--end col-->
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Địa chỉ :</label>
+                                    <div class="form-icon position-relative">
+                                        <i data-feather="map-pin" class="fea icon-sm icons"></i>
+                                        <input value="@Model.user.Location" name="location" id="subject" class="form-control ps-5" placeholder="Địa chỉ :" />
                                     </div>
                                 </div>
                             </div><!--end col-->
                             <div class="col-md-12">
                                 <div class="mb-3">
-                                    <label class="form-label">Địa chỉ :</label>
-                                    <div class="form-icon position-relative">
-                                        <i data-feather="map-pin" class="fea icon-sm icons"></i>
-                                        <input value="@Model.Location" name="location" id="subject" class="form-control ps-5" placeholder="Địa chỉ :" />
-                                    </div>
+                                    <label for="formFile" class="form-label">CV :</label>
+                                    <input class="form-control" name="cv" type="file" id="formFile">
                                 </div>
                             </div><!--end col-->
                             <div class="col-12">
@@ -201,7 +236,7 @@
                                     <label class="form-label">Giới thiệu <span class="text-danger">*</span></label>
                                     <div class="form-icon position-relative">
                                         <i data-feather="message-circle" class="fea icon-sm icons clearfix"></i>
-                                        <textarea name="description" required id="comments" rows="4" class="form-control ps-5" placeholder="Giới thiệu đôi nét về bản thân...">@Model.Description</textarea>
+                                        <textarea name="description" required id="comments" rows="4" class="form-control ps-5" placeholder="Giới thiệu đôi nét về bản thân...">@Model.user.Description</textarea>
                                     </div>
                                 </div>
                             </div>

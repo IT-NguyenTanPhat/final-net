@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using timviec;
 
@@ -11,9 +12,11 @@ using timviec;
 namespace timviec.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230510031147_update10")]
+    partial class update10
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -141,11 +144,16 @@ namespace timviec.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
 
                     b.HasIndex("CompanyId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("jobs");
                 });
@@ -161,9 +169,6 @@ namespace timviec.Migrations
 
                     b.Property<DateTime?>("Birthday")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("CV")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -186,10 +191,6 @@ namespace timviec.Migrations
                     b.Property<string>("Phone")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Role")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
@@ -207,7 +208,7 @@ namespace timviec.Migrations
                         .IsRequired();
 
                     b.HasOne("timviec.Models.User", "User")
-                        .WithMany("Applies")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -227,6 +228,10 @@ namespace timviec.Migrations
                         .WithMany("Jobs")
                         .HasForeignKey("CompanyId");
 
+                    b.HasOne("timviec.Models.User", null)
+                        .WithMany("MarkedJobs")
+                        .HasForeignKey("UserId");
+
                     b.Navigation("Category");
 
                     b.Navigation("Company");
@@ -244,7 +249,7 @@ namespace timviec.Migrations
 
             modelBuilder.Entity("timviec.Models.User", b =>
                 {
-                    b.Navigation("Applies");
+                    b.Navigation("MarkedJobs");
                 });
 #pragma warning restore 612, 618
         }

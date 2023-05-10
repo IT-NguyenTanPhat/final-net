@@ -14,5 +14,6 @@ namespace timviec
         public DbSet<Job> jobs { get; set; }
         public DbSet<Company> companies { get; set; }
         public DbSet<User> users { get; set; }
+        public DbSet<Apply> applies { get; set; }
     }
 }

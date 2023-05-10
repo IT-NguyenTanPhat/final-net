@@ -17,7 +17,9 @@ namespace timviec.Models
         public string? Location { get; set; }
         public string? Phone { get; set; }
         public string? Description { get; set; }
-        public List<Job>? MarkedJobs { get; set; }
+        public string Role { get; set; } = "default";
+        public virtual ICollection<Apply>? Applies { get; set; }
         public string Avatar { get; set; } = "/uploads/user.png";
+        public string? CV { get; set; }
     }
 }

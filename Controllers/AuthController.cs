@@ -12,7 +12,7 @@ namespace timviec.Controllers
 
         public static dynamic? account;
         private Timer timer;
-        private int interval = 60000;
+        private int interval = 3600000;
 
         public AuthController(AppDbContext db) { 
             _db = db;
@@ -60,6 +60,7 @@ namespace timviec.Controllers
                 Response.Cookies.Append("user", email, options);
                 account = user;
                 timer.Start();
+                if (user.Role.Equals("admin")) return Redirect("/admin");
                 return Redirect("/");
             }
             
@@ -109,6 +110,7 @@ namespace timviec.Controllers
         public IActionResult Logout()
         {
             Response.Cookies.Delete("user");
+            account = null;
             return RedirectToAction("Login");
         }
     }

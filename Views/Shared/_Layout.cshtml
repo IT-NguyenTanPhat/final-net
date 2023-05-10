@@ -75,8 +75,6 @@
                             @if (account is User)
                             {
                                 <a class='dropdown-item' href='/users/@account.Id'>Hồ sơ</a>
-                                <a class='dropdown-item' href='/users/@account.Id/applied-job'>Đã ứng tuyển</a>
-                                <a class='dropdown-item' href='/users/@account.Id/marked-job'>Đã lưu</a>
                             } else
                             {
                                 <a class='dropdown-item' href='/companies/@account.Id'>Hồ sơ</a>
@@ -141,7 +139,6 @@
                                 @if (account is User)
                                 {
                                     <a class='dropdown-item' href='/users/@account.Id'>Hồ sơ</a>
-                                    <a class='dropdown-item' href='/users/@account.Id/history'>Lịch sử ứng tuyển</a>
                                 }
                                 else
                                 {

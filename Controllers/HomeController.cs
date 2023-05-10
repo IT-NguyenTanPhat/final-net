@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using timviec.Models;
+using timviec.Utils;
 
 namespace timviec.Controllers
 {
@@ -13,6 +14,9 @@ namespace timviec.Controllers
             public IEnumerable<Category> categories { get; set; }
             public IEnumerable<Job> jobs { get; set; }
             public IEnumerable<Company> companies { get; set; }
+            public IEnumerable<Apply> applies { get; set; }
+            public User user { get; set; }
+            public Page page { get; set; }
         }
 
         public HomeController(ILogger<HomeController> logger, AppDbContext db)
@@ -24,9 +28,9 @@ namespace timviec.Controllers
         [Route("")]
         public IActionResult Index()
         {
-            IEnumerable<Category> categories = _db.categories.Include(c => c.Jobs);
-            IEnumerable<Job> jobs = _db.jobs.Include(c => c.Company);
-            IEnumerable<Company> companies = _db.companies;
+            IEnumerable<Category> categories = _db.categories.Include(c => c.Jobs.Where(j => j.Status.Equals("censored"))).Take(4).ToList();
+            IEnumerable<Job> jobs = _db.jobs.Include(c => c.Company).Where(j => j.Status.Equals("censored")).Take(6).ToList();
+            IEnumerable<Company> companies = _db.companies.Take(8).ToList();
 
             Database model = new Database()
             {
@@ -52,7 +56,16 @@ namespace timviec.Controllers
         [HttpGet("/admin")]
         public IActionResult Admin()
         {
-            return RedirectToAction("Dashboard", "Category");
+            var email = Request.Cookies["user"];
+            if (email != null)
+            {
+                var user = _db.users.SingleOrDefault(u => u.Email.Equals(email));
+                if (user != null && user.Role.Equals("admin"))
+                {
+                    return RedirectToAction("Dashboard", "Category");
+                }
+            }
+            return View("Error");
         }
 
         [Route("{*url}")]

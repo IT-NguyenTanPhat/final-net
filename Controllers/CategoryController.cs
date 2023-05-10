@@ -13,8 +13,17 @@ namespace timviec.Controllers
         [HttpGet("/admin/categories")]
         public IActionResult Dashboard()
         {
-            IEnumerable<Category> categories = _db.categories;
-            return View(categories);
+            var email = Request.Cookies["user"];
+            if (email != null)
+            {
+                var user = _db.users.SingleOrDefault(u => u.Email.Equals(email));
+                if (user != null && user.Role.Equals("admin"))
+                {
+                    IEnumerable<Category> categories = _db.categories;
+                    return View(categories);
+                }
+            }
+            return View("Error");
         }
 
         [HttpPost("/admin/categories/create")]
@@ -35,12 +44,19 @@ namespace timviec.Controllers
         [HttpGet("/admin/categories/{id?}")]
         public IActionResult Update(string? id)
         {
-            var category = _db.categories.Find(id);
-            if (category != null)
+            var email = Request.Cookies["user"];
+            if (email != null)
             {
-                return View(category);
+                var user = _db.users.SingleOrDefault(u => u.Email.Equals(email));
+                if (user != null && user.Role.Equals("admin"))
+                {
+                    var category = _db.categories.Find(id);
+                    if (category != null)
+                    {
+                        return View(category);
+                    }
+                }
             }
-            ViewData["message"] = "Xin lỗi, không tìm thấy danh mục này.";
             return View("Error");
         }
 
